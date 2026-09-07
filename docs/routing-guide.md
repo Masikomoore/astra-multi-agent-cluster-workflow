@@ -40,7 +40,7 @@ Packets:
 - sol_worker: <one high-stakes implementation or ruling>
 - grok_worker: <fast development / multimodal speed path>
 - gemini_flash_worker: <SEOGEO, Chinese article, human-like prose>
-- cheap daily: <luna_worker or deepseek_flash_worker by agents/cheap-daily.toml>
+- cheap daily: <luna_worker or deepseek_flash_worker by .codex/agents/cheap-daily.toml>
 Constraints: disjoint writable files; one owner each.
 Return: per-packet files changed, checks, remaining risks.
 Astra: integrate, run final validation, accept or reject.

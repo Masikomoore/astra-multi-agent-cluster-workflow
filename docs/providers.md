@@ -55,6 +55,6 @@ client = OpenAI(
 print(client.models.list())
 ```
 
-If a listed model is missing from `GET /v1/models`, say so and fall back to `luna_worker` or `sol_worker`. Never claim a specialist ran.
+If a listed model is missing from `GET /v1/models`, say so and fall back through the cheap-daily mix in `.codex/agents/cheap-daily.toml`, then `sol_worker`. Never claim a specialist ran.
 
 Optional local quant for `qwen3.8-27b`: serve Huihui Q4_K GGUF as an OpenAI-compatible server and point `base_url` at it. Ollama: `ollama run huihui_ai/Qwen3.8-abliterated`.

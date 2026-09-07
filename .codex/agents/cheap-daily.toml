@@ -13,5 +13,5 @@ deepseek = 5
 developer_instructions = """
 This file is mix configuration, not a worker. Do not implement packets.
 
-Astra reads the luna and deepseek integer weights in this TOML before assigning cheap-daily packets. If spawned by mistake, return immediately and tell Astra to assign luna_worker or deepseek_flash_worker using those weights.
+Astra reads `.codex/agents/cheap-daily.toml` (luna and deepseek integer weights) before assigning cheap-daily packets. If spawned by mistake, return immediately and tell Astra to assign luna_worker or deepseek_flash_worker using those weights.
 """
