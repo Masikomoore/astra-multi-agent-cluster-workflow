@@ -1,7 +1,5 @@
 # Routing guide
 
-GPT packets in the examples (`gpt-6-astra`, `gpt-5.6-sol`, `gpt-5.6-luna`) are called through Xclis **GPT-稳定**. See the README and [providers.md](providers.md).
-
 ## Decision sequence
 
 1. Can GPT-6 Astra complete and verify the task safely in one thread? Use `ASTRA_LOCAL`.

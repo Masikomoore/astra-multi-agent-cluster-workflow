@@ -1,8 +1,6 @@
 # Model roster
 
-Facts below are from vendor docs and Hugging Face cards as of 2026-09-07. They describe published capabilities for routing. They are not runtime proof that Codex loaded the model.
-
-**GPT calling path for this repo:** Xclis.ai official group **GPT-稳定（Stable）**, host `https://jp.xclis.ai/v1`. See [providers.md](providers.md) and the README examples. Do not use GPT-特惠 for these examples.
+Facts below are from vendor docs and Hugging Face cards as of 2026-09-07. They describe published capabilities for routing. They are not runtime proof that Codex loaded the model. Provider parameters for the examples are in [providers.md](providers.md).
 
 | Role | Agent | Model ID | Effort in this repo |
 | --- | --- | --- | --- |
@@ -11,11 +9,9 @@ Facts below are from vendor docs and Hugging Face cards as of 2026-09-07. They d
 | Fast cheap coder | `deepseek_flash_worker` | `deepseek-v4-flash` | `high` |
 | Long-horizon / multimodal | `gemini_flash_worker` | `gemini-3.8-flash` | `high` |
 | Search / current events | `grok_worker` | `grok-4.6` | `high` |
-| Cheap Chinese / office | `qwen_flash_worker` | `qwen3.8-flash` | `high` |
+| Cheap Chinese / office | `qwen_flash_worker` | `Qwen3.8-Flash-Next` | `high` |
 | Reduced-refusal | `qwen_uncensored_worker` | `qwen3.8-27b` | `medium` |
 | Cheap OpenAI fallback | `luna_worker` | `gpt-5.6-luna` | `max` |
-
-GPT rows (`gpt-6-astra`, `gpt-5.6-sol`, `gpt-5.6-luna`) are the models this workflow sends through Xclis GPT-稳定. Other rows need a separate provider.
 
 ## gpt-6-astra
 
@@ -68,9 +64,9 @@ xAI frontier model for coding, agentic tasks, and knowledge work. Default in Gro
 
 Sources: [Grok 4.6 docs](https://docs.x.ai/developers/grok-4-6), [release notes](https://x.ai/docs/release-notes), [announcement](https://x.ai/news/grok-4-6)
 
-## qwen3.8-flash (Qwen3.8-Flash-Next)
+## Qwen3.8-Flash-Next
 
-Open weights are `Qwen/Qwen3.8-Flash-Next` (Qwen4 architecture preview). Production API id `qwen3.8-flash` adds 1M context and built-in tools.
+Open weights are `Qwen/Qwen3.8-Flash-Next` (Qwen4 architecture preview). This workflow uses catalog id `Qwen3.8-Flash-Next`.
 
 - ~125B MoE + n-gram embeddings, ~6B active/token
 - Strong coding/office; cheap long context; especially good for Chinese packets

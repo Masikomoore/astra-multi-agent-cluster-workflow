@@ -25,11 +25,11 @@ Assign by task attributes, not by habit. If the needed model is unavailable, say
 | `deepseek_flash_worker` | `deepseek-v4-flash` | Fast cheap coding, math/STEM, and high-volume independent edits. |
 | `gemini_flash_worker` | `gemini-3.8-flash` | Long-horizon multi-file SWE, multimodal input, large-corpus analysis, agentic loops. |
 | `grok_worker` | `grok-4.6` | Coding/agentic work that needs live web or X search, current events, or post-cutoff facts. |
-| `qwen_flash_worker` | `qwen3.8-flash` | Cheap 1M-context coding/office work, especially Chinese-language packets. |
+| `qwen_flash_worker` | `Qwen3.8-Flash-Next` | Cheap 1M-context coding/office work, especially Chinese-language packets. |
 | `qwen_uncensored_worker` | `qwen3.8-27b` | Reduced-refusal / special-instruction packets that aligned models decline. Huihui abliterated Qwen3.8-27B (Q4_K for local). |
 | `luna_worker` | `gpt-5.6-luna` | Cheap OpenAI fallback for routine disjoint execution when a specialist is unnecessary or unavailable. |
 
-See [docs/models.md](docs/models.md) for published capabilities. GPT models in this pack (`gpt-6-astra`, `gpt-5.6-sol`, `gpt-5.6-luna`) are documented against Xclis GPT-稳定; other workers need [docs/providers.md](docs/providers.md).
+See [docs/models.md](docs/models.md) for published capabilities and [docs/providers.md](docs/providers.md) for provider parameters.
 
 ## Dispatch rules
 

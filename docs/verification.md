@@ -28,7 +28,7 @@ expected = {
     'deepseek-flash-worker': ('deepseek_flash_worker', 'deepseek-v4-flash', 'high'),
     'gemini-flash-worker': ('gemini_flash_worker', 'gemini-3.8-flash', 'high'),
     'grok-worker': ('grok_worker', 'grok-4.6', 'high'),
-    'qwen-flash-next-worker': ('qwen_flash_worker', 'qwen3.8-flash', 'high'),
+    'qwen-flash-next-worker': ('qwen_flash_worker', 'Qwen3.8-Flash-Next', 'high'),
     'qwen-uncensored-worker': ('qwen_uncensored_worker', 'qwen3.8-27b', 'medium'),
 }
 
@@ -58,8 +58,7 @@ Static TOML validation cannot prove model access or runtime loading. Report actu
 
 ## Fallbacks
 
-- GPT examples assume an Xclis API key created in **GPT-稳定（Stable）**. If `/v1/models` does not list the GPT ids, recreate the key in that group; do not silently switch to GPT-特惠.
+- If a configured model is missing from the provider catalog, report the gap and fall back to `luna_worker` or `sol_worker`.
 - If GPT-6 Astra is unavailable, stop or explicitly document the substitute orchestrator.
-- If a non-OpenAI specialist is unavailable, report the gap and use `luna_worker` or `sol_worker` on GPT-稳定.
 - If custom agents are unavailable, select GPT-6 Astra as the main model and name specialists in the prompt.
 - If parallelism adds more coordination than value, use `ASTRA_LOCAL`.
