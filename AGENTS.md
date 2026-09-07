@@ -1,4 +1,4 @@
-# Astra-dispatch Engineering Rules
+# Astra multi-agent cluster rules
 
 Use GPT-6 Astra as the primary advisor and orchestrator. Astra decomposes the user task and dispatches concurrent specialist workers.
 

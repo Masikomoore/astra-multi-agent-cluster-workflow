@@ -1,4 +1,4 @@
-# Astra-dispatch Codex workflow
+# Astra multi-agent cluster workflow
 
 [中文说明](README.md)
 
