@@ -4,7 +4,7 @@ Facts below are from vendor docs and Hugging Face cards as of 2026-09-07. They d
 
 | Role | Agent | Model ID | Effort in this repo |
 | --- | --- | --- | --- |
-| Advisor / orchestrator | primary thread | `gpt-6-astra` | `high` |
+| Advisor / orchestrator | primary thread | `gpt-6-astra` | `xhigh` |
 | Hard professional worker | `sol_worker` | `gpt-5.6-sol` | `high` |
 | Fast cheap coder | `deepseek_flash_worker` | `deepseek-v4-flash` | `high` |
 | Long-horizon / multimodal | `gemini_flash_worker` | `gemini-3.8-flash` | `high` |

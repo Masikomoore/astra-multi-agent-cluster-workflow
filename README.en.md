@@ -56,11 +56,11 @@ User-level `~/.codex/config.toml` only. Project config cannot set `model_provide
 
 ```toml
 model = "gpt-6-astra"
-model_reasoning_effort = "high"
-model_provider = "example"
+model_reasoning_effort = "xhigh"
+model_provider = "xclis_ai"
 
-[model_providers.example]
-name = "example"
+[model_providers.xclis_ai]
+name = "xclis_ai"
 base_url = "https://jp.xclis.ai/v1"
 env_key = "API_KEY"
 wire_api = "responses"
