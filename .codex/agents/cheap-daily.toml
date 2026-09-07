@@ -1,0 +1,17 @@
+name = "cheap_daily"
+description = "Cheap-daily mix config. Do not spawn. Astra reads luna and deepseek weights per 10 assignments."
+model = "gpt-5.6-luna"
+model_reasoning_effort = "max"
+sandbox_mode = "read-only"
+
+# luna : deepseek, counted per 10 cheap-daily assignments.
+# Example 4:6 → 4× luna_worker, 6× deepseek_flash_worker
+# 10:0 → only Luna; 0:10 → only DeepSeek
+luna = 5
+deepseek = 5
+
+developer_instructions = """
+This file is mix configuration, not a worker. Do not implement packets.
+
+Astra reads the luna and deepseek integer weights in this TOML before assigning cheap-daily packets. If spawned by mistake, return immediately and tell Astra to assign luna_worker or deepseek_flash_worker using those weights.
+"""

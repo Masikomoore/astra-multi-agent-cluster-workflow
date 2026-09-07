@@ -13,7 +13,7 @@ Facts below are from vendor docs and Hugging Face cards as of 2026-09-07. They d
 | Reduced-refusal | `qwen_uncensored_worker` | `qwen3.8-27b` | `medium` |
 | Cheap daily (mixed) | `luna_worker` | `gpt-5.6-luna` | `max` |
 
-Cheap daily mix is `.codex/cheap-daily.toml` (`luna` : `deepseek` per 10 assignments).
+Cheap daily mix is `.codex/agents/cheap-daily.toml` (`luna` : `deepseek` per 10 assignments).
 
 ## gpt-6-astra
 
@@ -41,7 +41,7 @@ Source: [model page](https://developers.openai.com/api/docs/models/gpt-5.6-sol)
 DeepSeek-V4 Flash: 284B MoE / 13B active. Fast, efficient, economical. Reasoning approaches V4-Pro; simple agent tasks are similar; hardest agent work still favors Pro.
 
 - 1M context; max output 384k; thinking and non-thinking; tools and JSON
-- Cheap daily pool with Luna; mix via `.codex/cheap-daily.toml`. Close to Luna; concurrency may decide the weights.
+- Cheap daily pool with Luna; mix via `.codex/agents/cheap-daily.toml`. Close to Luna; concurrency may decide the weights.
 
 Sources: [V4 preview](https://api-docs.deepseek.com/news/news260424/), [pricing](https://api-docs.deepseek.com/quick_start/pricing), [HF weights](https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash)
 
@@ -89,4 +89,4 @@ Base Qwen3.8-27B is a 27B dense vision-language model (Apache-2.0, 262k native c
 
 ## gpt-5.6-luna
 
-Cheap daily pool with DeepSeek. Mix via `.codex/cheap-daily.toml`. Also `default_subagent_model` when Codex needs a fallback spawn.
+Cheap daily pool with DeepSeek. Mix via `.codex/agents/cheap-daily.toml`. Also `default_subagent_model` when Codex needs a fallback spawn.

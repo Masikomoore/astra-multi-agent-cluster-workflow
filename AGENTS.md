@@ -33,7 +33,7 @@ Assign by task attributes, not by habit. If the needed model is unavailable, say
 
 Routine, low-risk, disjoint packets that do not need Grok/Gemini/Sol/Qwen strengths go to the cheap daily pool.
 
-Read `.codex/cheap-daily.toml` before assigning those packets. `luna` and `deepseek` are weights per 10 assignments (example `4` and `6` means 4 Luna, 6 DeepSeek out of 10). `10:0` is Luna only; `0:10` is DeepSeek only.
+Read `.codex/agents/cheap-daily.toml` before assigning those packets. Do not spawn `cheap_daily`. `luna` and `deepseek` are weights per 10 assignments (example `4` and `6` means 4 Luna, 6 DeepSeek out of 10). `10:0` is Luna only; `0:10` is DeepSeek only.
 
 Keep a running count in the current session so the mix stays close to the ratio. If only one cheap packet is needed, sample with probability `luna / (luna + deepseek)`. Do not invent a third cheap model.
 

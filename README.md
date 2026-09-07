@@ -60,7 +60,7 @@ flowchart TD
 
 Grok 4.6 与 Gemini 3.8 Flash 都具备多模态和快速开发能力；**快速开发优先 Grok 4.6**。Gemini 另承担 SEOGEO、中文文章和拟人化写作。
 
-便宜日常包由 Astra 读 `.codex/cheap-daily.toml` 再抽：`luna = 4`、`deepseek = 6` 表示每 10 次里 Luna 4 次、DeepSeek 6 次。`10:0` 只用 Luna，`0:10` 只用 DeepSeek。两者能力接近，可按站点并发调整。
+便宜日常包由 Astra 读 `.codex/agents/cheap-daily.toml` 再抽：`luna = 4`、`deepseek = 6` 表示每 10 次里 Luna 4 次、DeepSeek 6 次。`10:0` 只用 Luna，`0:10` 只用 DeepSeek。两者能力接近，可按站点并发调整。
 
 完整能力表：[docs/models.md](docs/models.md)
 
@@ -102,7 +102,6 @@ curl "$CODEX_BASE_URL/responses" \
 
 ```text
 .codex/config.toml
-.codex/cheap-daily.toml
 .codex/agents/*.toml
 AGENTS.md
 ```

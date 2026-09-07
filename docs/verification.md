@@ -14,6 +14,7 @@ config = tomllib.loads((root / 'config.toml').read_text())
 agents = {
     path.stem: tomllib.loads(path.read_text())
     for path in sorted((root / 'agents').glob('*.toml'))
+    if path.name != 'cheap-daily.toml'
 }
 
 assert config['model'] == 'gpt-6-astra'
@@ -22,7 +23,8 @@ assert config['agents']['default_subagent_model'] == 'gpt-5.6-luna'
 assert config['agents']['default_subagent_reasoning_effort'] == 'max'
 assert config['agents']['max_concurrent_threads_per_session'] == 8
 
-cheap = tomllib.loads((root / 'cheap-daily.toml').read_text())
+cheap = tomllib.loads((root / 'agents' / 'cheap-daily.toml').read_text())
+assert cheap['name'] == 'cheap_daily'
 assert cheap['luna'] >= 0 and cheap['deepseek'] >= 0
 assert cheap['luna'] + cheap['deepseek'] > 0
 
@@ -55,7 +57,7 @@ PY
 Start a new task after installing the files.
 
 1. Ask for one small bounded edit. Confirm the primary task identifies GPT-6 Astra.
-2. Ask for two independent disjoint edits plus one live-docs check. Confirm Astra prefers `grok_worker` for fast development, uses `gemini_flash_worker` for SEOGEO/Chinese prose, mixes cheap daily from `.codex/cheap-daily.toml`, and that writable files have one owner.
+2. Ask for two independent disjoint edits plus one live-docs check. Confirm Astra prefers `grok_worker` for fast development, uses `gemini_flash_worker` for SEOGEO/Chinese prose, mixes cheap daily from `.codex/agents/cheap-daily.toml`, and that writable files have one owner.
 3. Present a high-impact design question. Confirm Astra answers it in the primary thread (or sends implementation to `sol_worker`), then Astra validates.
 
 Static TOML validation cannot prove model access or runtime loading. Report actual model use only when Agent activity or tool output identifies it.

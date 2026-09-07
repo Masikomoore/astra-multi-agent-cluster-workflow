@@ -49,7 +49,7 @@ All of these model IDs use the same provider in the examples.
 
 Grok 4.6 and Gemini 3.8 Flash are both multimodal and capable of fast development. **Prefer Grok 4.6 for speed.** Gemini also covers SEOGEO, Chinese articles, and human-like prose.
 
-Cheap daily packets are mixed from `.codex/cheap-daily.toml`. `luna = 4` and `deepseek = 6` means 4 Luna and 6 DeepSeek out of 10. Use `10:0` or `0:10` to pin one side. They are close; pick the mix from site concurrency.
+Cheap daily packets are mixed from `.codex/agents/cheap-daily.toml`. `luna = 4` and `deepseek = 6` means 4 Luna and 6 DeepSeek out of 10. Use `10:0` or `0:10` to pin one side. They are close; pick the mix from site concurrency.
 
 See [docs/models.md](docs/models.md) for vendor capabilities.
 
@@ -80,7 +80,7 @@ Change only the `model` field to any ID in the roster. More replacement notes: [
 
 ## Install
 
-Merge `.codex/config.toml`, `.codex/cheap-daily.toml`, `.codex/agents/*.toml`, and `AGENTS.md` into a project, then start a **new** Codex task.
+Merge `.codex/config.toml`, `.codex/agents/*.toml`, and `AGENTS.md` into a project, then start a **new** Codex task.
 
 A custom agent needs `name`, `description`, and `developer_instructions`. Copy agent files to `~/.codex/agents/` for personal use.
 
