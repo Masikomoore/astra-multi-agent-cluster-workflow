@@ -11,7 +11,7 @@
 ## 项目特点
 
 1. **Astra 只做顾问和验收。** 高风险判断留在主线程；Worker 只执行被划定的包，不得自称最终验收。
-2. **按特征分派，而不是一个模型包办。** 编码、长程重构、实时检索、中文办公、低拒答，各走对应 worker。
+2. **按特征分派，而不是一个模型包办。** 快速开发优先 Grok 4.6；Gemini 3.8 做多模态、SEOGEO 和拟人化中文写作；日常便宜包按比例在 Luna 与 DeepSeek 之间抽。
 3. **可并发，但文件必须互斥。** 每个可写文件同一时间只有一个负责人。
 4. **磁盘上的 TOML 不能证明运行时真加载了该模型。** 只有 Agent 活动或工具结果写出模型 id，才能报告实际用了谁。
 
@@ -24,13 +24,17 @@ flowchart TD
     U["用户任务"] --> A["GPT-6 Astra 主线程：判断并拆分"]
     A -->|边界清晰| E["ASTRA_LOCAL：Astra 自己做完"]
     A -->|可拆成独立包| P["ASTRA_DISPATCH：按特征并发分派"]
-    P --> S1["sol_worker · gpt-5.6-sol"]
-    P --> S2["luna_worker · gpt-5.6-luna"]
-    P --> S3["deepseek / gemini / grok / qwen workers"]
+    P --> S1["sol_worker · 高风险"]
+    P --> S2["grok_worker · 快速开发首选"]
+    P --> S3["gemini_flash_worker · SEOGEO / 拟人化写作"]
+    P --> S4["cheap daily · luna 或 deepseek 按比例"]
+    P --> S5["qwen workers"]
     E --> V["Astra 整合并验收"]
     S1 --> V
     S2 --> V
     S3 --> V
+    S4 --> V
+    S5 --> V
 ```
 
 | 路由 | 何时用 |
@@ -48,12 +52,15 @@ flowchart TD
 | --- | --- | --- |
 | 顾问 / 调度 | 主线程 | `gpt-6-astra` |
 | 高风险专业执行 | `sol_worker` | `gpt-5.6-sol` |
-| 便宜日常执行 | `luna_worker` | `gpt-5.6-luna` |
-| 高速编码 | `deepseek_flash_worker` | `deepseek-v4-flash` |
-| 长程 / 多模态 | `gemini_flash_worker` | `gemini-3.8-flash` |
-| 实时检索 | `grok_worker` | `grok-4.6` |
+| 快速开发（首选） | `grok_worker` | `grok-4.6` |
+| 多模态 / SEOGEO / 拟人化中文写作 | `gemini_flash_worker` | `gemini-3.8-flash` |
+| 便宜日常执行 | `luna_worker` 与 `deepseek_flash_worker` 按比例 | `gpt-5.6-luna` / `deepseek-v4-flash` |
 | 中文 / 办公长文 | `qwen_flash_worker` | `Qwen3.8-Flash-Next` |
 | 低拒答 / 特殊指令 | `qwen_uncensored_worker` | `qwen3.8-27b` |
+
+Grok 4.6 与 Gemini 3.8 Flash 都具备多模态和快速开发能力；**快速开发优先 Grok 4.6**。Gemini 另承担 SEOGEO、中文文章和拟人化写作。
+
+便宜日常包由 Astra 读 `.codex/cheap-daily.toml` 再抽：`luna = 4`、`deepseek = 6` 表示每 10 次里 Luna 4 次、DeepSeek 6 次。`10:0` 只用 Luna，`0:10` 只用 DeepSeek。两者能力接近，可按站点并发调整。
 
 完整能力表：[docs/models.md](docs/models.md)
 
@@ -95,6 +102,7 @@ curl "$CODEX_BASE_URL/responses" \
 
 ```text
 .codex/config.toml
+.codex/cheap-daily.toml
 .codex/agents/*.toml
 AGENTS.md
 ```

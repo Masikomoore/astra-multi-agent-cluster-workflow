@@ -22,6 +22,10 @@ assert config['agents']['default_subagent_model'] == 'gpt-5.6-luna'
 assert config['agents']['default_subagent_reasoning_effort'] == 'max'
 assert config['agents']['max_concurrent_threads_per_session'] == 8
 
+cheap = tomllib.loads((root / 'cheap-daily.toml').read_text())
+assert cheap['luna'] >= 0 and cheap['deepseek'] >= 0
+assert cheap['luna'] + cheap['deepseek'] > 0
+
 expected = {
     'luna-worker': ('luna_worker', 'gpt-5.6-luna', 'max'),
     'sol-worker': ('sol_worker', 'gpt-5.6-sol', 'high'),
@@ -51,14 +55,14 @@ PY
 Start a new task after installing the files.
 
 1. Ask for one small bounded edit. Confirm the primary task identifies GPT-6 Astra.
-2. Ask for two independent disjoint edits plus one live-docs check. Confirm Astra dispatches named specialists (`deepseek_flash_worker`, `gemini_flash_worker`, `grok_worker`, or `luna_worker` fallback) and that writable files have one owner.
+2. Ask for two independent disjoint edits plus one live-docs check. Confirm Astra prefers `grok_worker` for fast development, uses `gemini_flash_worker` for SEOGEO/Chinese prose, mixes cheap daily from `.codex/cheap-daily.toml`, and that writable files have one owner.
 3. Present a high-impact design question. Confirm Astra answers it in the primary thread (or sends implementation to `sol_worker`), then Astra validates.
 
 Static TOML validation cannot prove model access or runtime loading. Report actual model use only when Agent activity or tool output identifies it.
 
 ## Fallbacks
 
-- If a configured model is missing from the provider catalog, report the gap and fall back to `luna_worker` or `sol_worker`.
+- If a configured model is missing from the provider catalog, report the gap and fall back through the cheap-daily mix, then `sol_worker`.
 - If GPT-6 Astra is unavailable, stop or explicitly document the substitute orchestrator.
 - If custom agents are unavailable, select GPT-6 Astra as the main model and name specialists in the prompt.
 - If parallelism adds more coordination than value, use `ASTRA_LOCAL`.

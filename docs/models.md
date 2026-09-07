@@ -6,12 +6,14 @@ Facts below are from vendor docs and Hugging Face cards as of 2026-09-07. They d
 | --- | --- | --- | --- |
 | Advisor / orchestrator | primary thread | `gpt-6-astra` | `xhigh` |
 | Hard professional worker | `sol_worker` | `gpt-5.6-sol` | `high` |
-| Fast cheap coder | `deepseek_flash_worker` | `deepseek-v4-flash` | `high` |
-| Long-horizon / multimodal | `gemini_flash_worker` | `gemini-3.8-flash` | `high` |
-| Search / current events | `grok_worker` | `grok-4.6` | `high` |
+| Fast development (preferred) | `grok_worker` | `grok-4.6` | `high` |
+| Multimodal / SEOGEO / human-like Chinese writing | `gemini_flash_worker` | `gemini-3.8-flash` | `high` |
+| Cheap daily (mixed) | `deepseek_flash_worker` | `deepseek-v4-flash` | `high` |
 | Cheap Chinese / office | `qwen_flash_worker` | `Qwen3.8-Flash-Next` | `high` |
 | Reduced-refusal | `qwen_uncensored_worker` | `qwen3.8-27b` | `medium` |
-| Cheap OpenAI fallback | `luna_worker` | `gpt-5.6-luna` | `max` |
+| Cheap daily (mixed) | `luna_worker` | `gpt-5.6-luna` | `max` |
+
+Cheap daily mix is `.codex/cheap-daily.toml` (`luna` : `deepseek` per 10 assignments).
 
 ## gpt-6-astra
 
@@ -39,13 +41,13 @@ Source: [model page](https://developers.openai.com/api/docs/models/gpt-5.6-sol)
 DeepSeek-V4 Flash: 284B MoE / 13B active. Fast, efficient, economical. Reasoning approaches V4-Pro; simple agent tasks are similar; hardest agent work still favors Pro.
 
 - 1M context; max output 384k; thinking and non-thinking; tools and JSON
-- Assign high-volume coding, math/STEM, and cheap independent implementation
+- Cheap daily pool with Luna; mix via `.codex/cheap-daily.toml`. Close to Luna; concurrency may decide the weights.
 
 Sources: [V4 preview](https://api-docs.deepseek.com/news/news260424/), [pricing](https://api-docs.deepseek.com/quick_start/pricing), [HF weights](https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash)
 
 ## gemini-3.8-flash
 
-Google's most intelligent Flash model, GA around 2026-09-02. Long-horizon software engineering, autonomous agents, enterprise workflows.
+Google's most intelligent Flash model, GA around 2026-09-02. Multimodal and able to do fast development; in this workflow it is not the first pick for speed. Prefer it for SEOGEO, Chinese articles, and human-like prose.
 
 - Inputs: text, image, audio, video. Context 1,048,576; max output 65,536
 - Thinking: `low` / `medium` (default) / `high`. `minimal` errors
@@ -55,7 +57,7 @@ Sources: [Gemini API latest model](https://ai.google.dev/gemini-api/docs/latest-
 
 ## grok-4.6
 
-xAI frontier model for coding, agentic tasks, and knowledge work. Default in Grok Build.
+xAI frontier model for coding, agentic tasks, and knowledge work. Default in Grok Build. In this workflow it is the **preferred fast-development** worker; also multimodal (text+image).
 
 - Context 500,000; text+image in, text out; knowledge cutoff 2026-02-01
 - Reasoning: `low` / `medium` / `high` (default) / `xhigh`
@@ -87,4 +89,4 @@ Base Qwen3.8-27B is a 27B dense vision-language model (Apache-2.0, 262k native c
 
 ## gpt-5.6-luna
 
-Cheap OpenAI fallback worker and `default_subagent_model`, used when a specialist is unnecessary or unavailable.
+Cheap daily pool with DeepSeek. Mix via `.codex/cheap-daily.toml`. Also `default_subagent_model` when Codex needs a fallback spawn.

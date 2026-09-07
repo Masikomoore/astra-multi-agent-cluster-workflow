@@ -20,8 +20,9 @@ Add tests for established parser behavior and run the targeted suite.
 
 Implement an approved feature whose UI, serializer, tests, and docs live in disjoint files:
 
-- UI + tests → `gemini_flash_worker` or `deepseek_flash_worker`
-- Chinese copy → `qwen_flash_worker`
+- Fast UI implementation → `grok_worker` (preferred for speed)
+- SEOGEO / Chinese article / human-like copy → `gemini_flash_worker`
+- Routine tests → cheap daily mix (`luna_worker` or `deepseek_flash_worker` per `.codex/cheap-daily.toml`)
 - Live API/docs check → `grok_worker`
 - Auth cache policy implementation → `sol_worker`
 
@@ -37,8 +38,9 @@ A research prompt that aligned models refuse, with an explicit legal scope, goes
 Decision: split into independent packets and assign specialists.
 Packets:
 - sol_worker: <one high-stakes implementation or ruling>
-- deepseek_flash_worker: <bounded coding files>
-- gemini_flash_worker: <long-horizon or multimodal files>
+- grok_worker: <fast development / multimodal speed path>
+- gemini_flash_worker: <SEOGEO, Chinese article, human-like prose>
+- cheap daily: <luna_worker or deepseek_flash_worker by cheap-daily.toml>
 Constraints: disjoint writable files; one owner each.
 Return: per-packet files changed, checks, remaining risks.
 Astra: integrate, run final validation, accept or reject.

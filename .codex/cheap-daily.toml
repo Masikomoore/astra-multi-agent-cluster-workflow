@@ -1,0 +1,8 @@
+# Cheap daily mix for routine packets.
+# luna : deepseek, counted per 10 cheap-daily assignments.
+# Example 4:6 → 4× luna_worker (gpt-5.6-luna), 6× deepseek_flash_worker (deepseek-v4-flash)
+# 10:0 → only Luna; 0:10 → only DeepSeek
+# The two are close; pick the mix from site concurrency if you prefer one side.
+
+luna = 5
+deepseek = 5

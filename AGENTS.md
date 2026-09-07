@@ -22,12 +22,20 @@ Assign by task attributes, not by habit. If the needed model is unavailable, say
 | Agent | Model | Assign when |
 | --- | --- | --- |
 | `sol_worker` | `gpt-5.6-sol` | Architecture, security, science, compatibility, root-cause, or other high-stakes professional packets. |
-| `deepseek_flash_worker` | `deepseek-v4-flash` | Fast cheap coding, math/STEM, and high-volume independent edits. |
-| `gemini_flash_worker` | `gemini-3.8-flash` | Long-horizon multi-file SWE, multimodal input, large-corpus analysis, agentic loops. |
-| `grok_worker` | `grok-4.6` | Coding/agentic work that needs live web or X search, current events, or post-cutoff facts. |
-| `qwen_flash_worker` | `Qwen3.8-Flash-Next` | Cheap 1M-context coding/office work, especially Chinese-language packets. |
+| `grok_worker` | `grok-4.6` | Preferred for fast development. Also multimodal (text+image), live web/X search, current events. |
+| `gemini_flash_worker` | `gemini-3.8-flash` | Multimodal and capable of fast development, but not the first pick for speed. Prefer this for SEOGEO, Chinese articles, and human-like prose. |
+| `qwen_flash_worker` | `Qwen3.8-Flash-Next` | Cheap 1M-context coding/office work, especially Chinese-language packets that are not article/SEOGEO writing. |
 | `qwen_uncensored_worker` | `qwen3.8-27b` | Reduced-refusal / special-instruction packets that aligned models decline. Huihui abliterated Qwen3.8-27B (Q4_K for local). |
-| `luna_worker` | `gpt-5.6-luna` | Cheap OpenAI fallback for routine disjoint execution when a specialist is unnecessary or unavailable. |
+| `luna_worker` | `gpt-5.6-luna` | Cheap daily execution pool (with DeepSeek). See mix below. |
+| `deepseek_flash_worker` | `deepseek-v4-flash` | Cheap daily execution pool (with Luna). Close to Luna; concurrency may decide the mix. |
+
+### Cheap daily mix
+
+Routine, low-risk, disjoint packets that do not need Grok/Gemini/Sol/Qwen strengths go to the cheap daily pool.
+
+Read `.codex/cheap-daily.toml` before assigning those packets. `luna` and `deepseek` are weights per 10 assignments (example `4` and `6` means 4 Luna, 6 DeepSeek out of 10). `10:0` is Luna only; `0:10` is DeepSeek only.
+
+Keep a running count in the current session so the mix stays close to the ratio. If only one cheap packet is needed, sample with probability `luna / (luna + deepseek)`. Do not invent a third cheap model.
 
 See [docs/models.md](docs/models.md) for published capabilities and [docs/providers.md](docs/providers.md) for provider parameters.
 

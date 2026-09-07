@@ -11,7 +11,7 @@ Model-calling examples in this repo use the GPT-稳定 group on [xclis.ai](https
 ## What this project does
 
 1. **Astra advises and accepts.** High-impact decisions stay in the primary thread. Workers execute bounded packets and never claim final acceptance.
-2. **Dispatch by published strengths.** Coding, long-horizon refactors, live search, Chinese office work, and reduced-refusal packets go to different workers.
+2. **Dispatch by published strengths.** Prefer Grok 4.6 for fast development. Use Gemini 3.8 for multimodal SEOGEO and human-like Chinese writing. Mix Luna and DeepSeek for cheap daily work.
 3. **Parallelism requires disjoint writable files.** One owner per file.
 4. **Files on disk do not prove a model ran.** Report a model only when agent activity or a tool result identifies it.
 
@@ -41,12 +41,15 @@ All of these model IDs use the same provider in the examples.
 | --- | --- | --- |
 | Advisor / orchestrator | primary | `gpt-6-astra` |
 | High-stakes professional work | `sol_worker` | `gpt-5.6-sol` |
-| Cheap fallback | `luna_worker` | `gpt-5.6-luna` |
-| Fast coding | `deepseek_flash_worker` | `deepseek-v4-flash` |
-| Long-horizon / multimodal | `gemini_flash_worker` | `gemini-3.8-flash` |
-| Live web / X search | `grok_worker` | `grok-4.6` |
+| Fast development (preferred) | `grok_worker` | `grok-4.6` |
+| Multimodal / SEOGEO / human-like Chinese writing | `gemini_flash_worker` | `gemini-3.8-flash` |
+| Cheap daily | `luna_worker` and `deepseek_flash_worker` by ratio | `gpt-5.6-luna` / `deepseek-v4-flash` |
 | Chinese / office | `qwen_flash_worker` | `Qwen3.8-Flash-Next` |
 | Reduced-refusal | `qwen_uncensored_worker` | `qwen3.8-27b` |
+
+Grok 4.6 and Gemini 3.8 Flash are both multimodal and capable of fast development. **Prefer Grok 4.6 for speed.** Gemini also covers SEOGEO, Chinese articles, and human-like prose.
+
+Cheap daily packets are mixed from `.codex/cheap-daily.toml`. `luna = 4` and `deepseek = 6` means 4 Luna and 6 DeepSeek out of 10. Use `10:0` or `0:10` to pin one side. They are close; pick the mix from site concurrency.
 
 See [docs/models.md](docs/models.md) for vendor capabilities.
 
@@ -77,7 +80,7 @@ Change only the `model` field to any ID in the roster. More replacement notes: [
 
 ## Install
 
-Merge `.codex/config.toml`, `.codex/agents/*.toml`, and `AGENTS.md` into a project, then start a **new** Codex task.
+Merge `.codex/config.toml`, `.codex/cheap-daily.toml`, `.codex/agents/*.toml`, and `AGENTS.md` into a project, then start a **new** Codex task.
 
 A custom agent needs `name`, `description`, and `developer_instructions`. Copy agent files to `~/.codex/agents/` for personal use.
 
