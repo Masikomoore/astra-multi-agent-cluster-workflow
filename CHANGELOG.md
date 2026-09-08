@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- README pitch: Astra as chief dispatcher so Plus is not limited to a few sentences; star if useful.
 - README one-sentence Codex install: analyze this repo, then install it globally.
 - GPT-6 Astra is the advisor and orchestrator (`ASTRA_LOCAL` / `ASTRA_DISPATCH`).
 - Specialist workers: `sol_worker`; `grok_worker` preferred for fast development; `gemini_flash_worker` for SEOGEO and human-like Chinese writing; cheap daily mix of Luna and DeepSeek via `.codex/agents/cheap-daily.toml`; Qwen workers.

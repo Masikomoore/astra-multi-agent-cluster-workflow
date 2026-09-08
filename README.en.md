@@ -2,6 +2,8 @@
 
 [中文说明](README.md)
 
+Let GPT-6 Astra act as the chief dispatcher and assign work to other models automatically, so Plus no longer dies after a few sentences. If this helps, come back and star the repo.
+
 This repository is a **Codex configuration pack**, not an application.
 
 GPT-6 Astra is the advisor and orchestrator. It splits work into disjoint packets and dispatches specialist workers in parallel.
