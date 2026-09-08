@@ -1,7 +1,6 @@
 name = "cheap_daily"
 description = "Cheap-daily mix config. Do not spawn. Astra reads luna and deepseek weights per 10 assignments."
 model = "deepseek-v4-flash"
-model_reasoning_effort = "high"
 sandbox_mode = "read-only"
 
 # luna : deepseek, counted per 10 cheap-daily assignments.

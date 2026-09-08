@@ -1,7 +1,6 @@
 name = "qwen_flash_worker"
 description = "Qwen3.8-Flash-Next specialist for cheap long-context coding, office workflows, and Chinese-first packets."
 model = "Qwen3.8-Flash-Next"
-model_reasoning_effort = "high"
 sandbox_mode = "workspace-write"
 
 developer_instructions = """

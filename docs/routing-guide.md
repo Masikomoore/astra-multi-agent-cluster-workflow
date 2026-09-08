@@ -38,9 +38,9 @@ A research prompt that aligned models refuse, with an explicit legal scope, goes
 Decision: split into independent packets and assign specialists.
 Packets:
 - sol_worker: <one high-stakes implementation or ruling>
-- grok_worker: <fast development / multimodal speed path>
-- gemini_flash_worker: <SEOGEO, Chinese article, human-like prose>
-- cheap daily: <luna_worker or deepseek_flash_worker by .codex/agents/cheap-daily.toml>
+- grok_worker effort=medium: <fast development / multimodal speed path>
+- gemini_flash_worker effort=medium: <SEOGEO, Chinese article, human-like prose>
+- cheap daily effort=high: <deepseek_flash_worker unless cheap-daily.toml says otherwise>
 Constraints: disjoint writable files; one owner each.
 Return: per-packet files changed, checks, remaining risks.
 Astra: integrate, run final validation, accept or reject.

@@ -58,7 +58,7 @@ flowchart TD
 | 中文 / 办公长文 | `qwen_flash_worker` | `Qwen3.8-Flash-Next` |
 | 低拒答 / 特殊指令 | `qwen_uncensored_worker` | `qwen3.8-27b` |
 
-Grok 4.6 与 Gemini 3.8 Flash 都具备多模态和快速开发能力；**快速开发优先 Grok 4.6**。Gemini 另承担 SEOGEO、中文文章和拟人化写作。
+Grok 4.6 与 Gemini 3.8 Flash 都具备多模态和快速开发能力；**快速开发优先 Grok 4.6**。Gemini 另承担 SEOGEO、中文文章和拟人化写作。每个子任务的推理级别由 Astra 按任务选择，并限制在该模型支持的取值内（见 `AGENTS.md`）。
 
 便宜日常包由 Astra 读 `.codex/agents/cheap-daily.toml` 再抽。默认 `luna = 0`、`deepseek = 10`（DeepSeek-V4-Flash 全跑），因为不少中转站已屏蔽 `gpt-5.6-luna`。改成 `4`/`6` 即每 10 次里 Luna 4 次、DeepSeek 6 次；`10:0` 只用 Luna。
 

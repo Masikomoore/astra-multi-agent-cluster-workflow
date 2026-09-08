@@ -1,7 +1,6 @@
 name = "sol_worker"
 description = "GPT-5.6 Sol specialist for hard professional reasoning and high-stakes implementation: architecture, security, science, compatibility, and root-cause packets assigned by Astra."
 model = "gpt-5.6-sol"
-model_reasoning_effort = "high"
 sandbox_mode = "workspace-write"
 
 developer_instructions = """

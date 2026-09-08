@@ -1,7 +1,6 @@
 name = "luna_worker"
 description = "Cheap daily worker (gpt-5.6-luna). Shares the cheap-daily pool with deepseek_flash_worker; Astra picks by .codex/agents/cheap-daily.toml ratio."
 model = "gpt-5.6-luna"
-model_reasoning_effort = "max"
 sandbox_mode = "workspace-write"
 
 developer_instructions = """

@@ -29,25 +29,26 @@ assert cheap['luna'] >= 0 and cheap['deepseek'] >= 0
 assert cheap['luna'] + cheap['deepseek'] > 0
 
 expected = {
-    'luna-worker': ('luna_worker', 'gpt-5.6-luna', 'max'),
-    'sol-worker': ('sol_worker', 'gpt-5.6-sol', 'high'),
-    'deepseek-flash-worker': ('deepseek_flash_worker', 'deepseek-v4-flash', 'high'),
-    'gemini-flash-worker': ('gemini_flash_worker', 'gemini-3.8-flash', 'high'),
-    'grok-worker': ('grok_worker', 'grok-4.6', 'high'),
-    'qwen-flash-next-worker': ('qwen_flash_worker', 'Qwen3.8-Flash-Next', 'high'),
-    'qwen-uncensored-worker': ('qwen_uncensored_worker', 'qwen3.8-27b', 'medium'),
+    'luna-worker': ('luna_worker', 'gpt-5.6-luna'),
+    'sol-worker': ('sol_worker', 'gpt-5.6-sol'),
+    'deepseek-flash-worker': ('deepseek_flash_worker', 'deepseek-v4-flash'),
+    'gemini-flash-worker': ('gemini_flash_worker', 'gemini-3.8-flash'),
+    'grok-worker': ('grok_worker', 'grok-4.6'),
+    'qwen-flash-next-worker': ('qwen_flash_worker', 'Qwen3.8-Flash-Next'),
+    'qwen-uncensored-worker': ('qwen_uncensored_worker', 'qwen3.8-27b'),
 }
 
 assert set(agents) == set(expected)
-for stem, (name, model, effort) in expected.items():
+for stem, (name, model) in expected.items():
     agent = agents[stem]
     assert agent['name'] == name, stem
     assert agent['model'] == model, stem
-    assert agent['model_reasoning_effort'] == effort, stem
+    assert 'model_reasoning_effort' not in agent, stem
     assert agent['description'].strip()
     assert agent['developer_instructions'].strip()
     for key in ('name', 'description', 'developer_instructions'):
         assert key in agent
+assert 'model_reasoning_effort' not in cheap
 print('Static configuration checks passed.')
 PY
 ```
@@ -57,8 +58,9 @@ PY
 Start a new task after installing the files.
 
 1. Ask for one small bounded edit. Confirm the primary task identifies GPT-6 Astra.
-2. Ask for two independent disjoint edits plus one live-docs check. Confirm Astra prefers `grok_worker` for fast development, uses `gemini_flash_worker` for SEOGEO/Chinese prose, mixes cheap daily from `.codex/agents/cheap-daily.toml`, and that writable files have one owner.
-3. Present a high-impact design question. Confirm Astra answers it in the primary thread (or sends implementation to `sol_worker`), then Astra validates.
+2. Ask for two independent disjoint edits plus one live-docs check. Confirm Astra prefers `grok_worker` for fast development, uses `gemini_flash_worker` for SEOGEO/Chinese prose, mixes cheap daily from `.codex/agents/cheap-daily.toml`, writes a clamped reasoning effort on each packet, and that writable files have one owner.
+3. Present a high-impact design question. Confirm Astra answers it in the primary thread (or sends implementation to `sol_worker` with a Sol-allowed effort), then Astra validates.
+4. Spawn `gemini_flash_worker` and `qwen_uncensored_worker`. Confirm effort is not `xhigh`/`max` on Gemini, and not above `medium` on the uncensored Qwen worker.
 
 Static TOML validation cannot prove model access or runtime loading. Report actual model use only when Agent activity or tool output identifies it.
 

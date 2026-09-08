@@ -1,7 +1,6 @@
 name = "gemini_flash_worker"
 description = "Gemini 3.8 Flash specialist for multimodal work, SEOGEO, Chinese articles, and human-like prose; can do fast development but Grok 4.6 is preferred for speed."
 model = "gemini-3.8-flash"
-model_reasoning_effort = "high"
 sandbox_mode = "workspace-write"
 
 developer_instructions = """

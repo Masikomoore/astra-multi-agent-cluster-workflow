@@ -2,20 +2,20 @@
 
 Facts below are from vendor docs and Hugging Face cards as of 2026-09-07. They describe published capabilities for routing. They are not runtime proof that Codex loaded the model. Provider parameters for the examples are in [providers.md](providers.md).
 
-| Role | Agent | Model ID | Effort in this repo |
+| Role | Agent | Model ID | Allowed effort (Astra clamps to this) |
 | --- | --- | --- | --- |
-| Advisor / orchestrator | primary thread | `gpt-6-astra` | `xhigh` |
-| Hard professional worker | `sol_worker` | `gpt-5.6-sol` | `high` |
-| Fast development (preferred) | `grok_worker` | `grok-4.6` | `high` |
-| Multimodal / SEOGEO / human-like Chinese writing | `gemini_flash_worker` | `gemini-3.8-flash` | `high` |
-| Cheap daily (mixed) | `deepseek_flash_worker` | `deepseek-v4-flash` | `high` |
-| Cheap Chinese / office | `qwen_flash_worker` | `Qwen3.8-Flash-Next` | `high` |
-| Reduced-refusal | `qwen_uncensored_worker` | `qwen3.8-27b` | `medium` |
-| Cheap daily (mixed) | `luna_worker` | `gpt-5.6-luna` | `max` |
+| Advisor / orchestrator | primary thread | `gpt-6-astra` | `low` `medium` `high` `xhigh` `max` (no `none`) |
+| Hard professional worker | `sol_worker` | `gpt-5.6-sol` | `none` `low` `medium` `high` `xhigh` `max` |
+| Fast development (preferred) | `grok_worker` | `grok-4.6` | `low` `medium` `high` `xhigh` |
+| Multimodal / SEOGEO / human-like Chinese writing | `gemini_flash_worker` | `gemini-3.8-flash` | `low` `medium` `high` |
+| Cheap daily (mixed) | `deepseek_flash_worker` | `deepseek-v4-flash` | thinking `high` `max` |
+| Cheap Chinese / office | `qwen_flash_worker` | `Qwen3.8-Flash-Next` | `low` `medium` `xhigh` |
+| Reduced-refusal | `qwen_uncensored_worker` | `qwen3.8-27b` | `low` `medium` |
+| Cheap daily (mixed) | `luna_worker` | `gpt-5.6-luna` | `none` `low` `medium` `high` `xhigh` `max` |
 
 Cheap daily mix is `.codex/agents/cheap-daily.toml` (`luna` : `deepseek` per 10 assignments). Default `0:10` (DeepSeek-V4-Flash) because many relay gateways have blocked Luna.
 
-Reasoning effort is hardcoded on each agent (`model_reasoning_effort` in the TOML). Astra does not pick effort when dispatching; Codex applies the spawned file's value. Primary Astra is `xhigh`. Unnamed subagent fallback is `high`.
+Astra chooses effort per packet, then clamps to the allowed set above. Worker TOML files do not pin `model_reasoning_effort`. Primary session default is `xhigh`. Unnamed subagent fallback is `high`. Dispatch rules: [AGENTS.md](../AGENTS.md).
 
 ## gpt-6-astra
 

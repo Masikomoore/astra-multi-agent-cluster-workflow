@@ -41,21 +41,30 @@ See [docs/models.md](docs/models.md) for published capabilities and [docs/provid
 
 ## Reasoning effort
 
-Effort is **hardcoded in each agent file**, not chosen by Astra at dispatch time. Codex uses the spawned agent's `model_reasoning_effort` when that field is set; the primary thread must not try to override it.
+Astra **chooses effort per packet**, then clamps it to what that model actually accepts. Worker TOML files do not set `model_reasoning_effort`, so Codex can apply the spawn value. If the spawn tool has an effort field, set it. Always write the chosen value into the task packet. If spawn cannot pass effort, Codex falls back to `default_subagent_reasoning_effort` (`high`); still record the intended value in the packet.
 
-| Who | Effort |
-| --- | --- |
-| Primary `gpt-6-astra` | `xhigh` |
-| `sol_worker` | `high` |
-| `grok_worker` | `high` |
-| `gemini_flash_worker` | `high` |
-| `deepseek_flash_worker` | `high` |
-| `qwen_flash_worker` | `high` |
-| `qwen_uncensored_worker` | `medium` |
-| `luna_worker` | `max` |
-| unnamed subagent fallback | `high` (from `default_subagent_reasoning_effort`) |
+Never send an unsupported value (many gateways return HTTP 400). Pick a task level, then clamp:
 
-To change effort, edit the agent TOML (or `.codex/config.toml` for the primary / unnamed fallback). Do not invent per-packet effort in the dispatch prompt.
+| Agent | Model | Allowed `model_reasoning_effort` | Do not send | If unsure |
+| --- | --- | --- | --- | --- |
+| primary | `gpt-6-astra` | `low`, `medium`, `high`, `xhigh`, `max` | `none` | keep session `xhigh` |
+| `sol_worker` | `gpt-5.6-sol` | `none`, `low`, `medium`, `high`, `xhigh`, `max` | — | `high` |
+| `luna_worker` | `gpt-5.6-luna` | `none`, `low`, `medium`, `high`, `xhigh`, `max` | — | cheap daily: `low` |
+| `grok_worker` | `grok-4.6` | `low`, `medium`, `high`, `xhigh` | `none`, `max` | fast dev: `medium` |
+| `gemini_flash_worker` | `gemini-3.8-flash` | `low`, `medium`, `high` | `none`, `minimal`, `xhigh`, `max` | writing: `medium` |
+| `deepseek_flash_worker` | `deepseek-v4-flash` | thinking: `high`, `max` | `medium`, `xhigh` | cheap daily: `high` |
+| `qwen_flash_worker` | `Qwen3.8-Flash-Next` | `low`, `medium`, `xhigh` (and `none` to skip think) | `high`, `max` | `medium`; map wanted `high` → `xhigh` |
+| `qwen_uncensored_worker` | `qwen3.8-27b` | `low`, `medium` | `high`, `xhigh`, `max` (this checkpoint can loop) | `medium` |
+
+Task heuristic before clamp:
+
+1. Cheap daily / mechanical edits → lowest useful allowed value.
+2. Fast development (Grok) → `medium`; bump to `high` if the packet is non-trivial; `xhigh` only after a failed attempt.
+3. SEOGEO / Chinese / human-like writing (Gemini) → `medium`; `high` for long or high-stakes copy.
+4. Sol high-stakes → `high`; `xhigh` or `max` for architecture, security, or two failed attempts.
+5. After two evidence-based failures, bump one allowed step if the model has a higher level.
+
+Do not spawn `cheap_daily`. Unnamed subagent fallback stays `high` unless Astra names a specialist.
 
 ## Dispatch rules
 
@@ -73,7 +82,7 @@ Astra keeps high-impact unresolved decisions. Workers execute bounded packets; t
 
 ## Task packet
 
-Every delegated packet must include objective, context, in-scope and out-of-scope files, constraints, acceptance criteria, exact validation, expected return, and escalation conditions.
+Every delegated packet must include objective, assigned agent, **reasoning effort** (already clamped), context, in-scope and out-of-scope files, constraints, acceptance criteria, exact validation, expected return, and escalation conditions.
 
 Workers must stop on ambiguity, unexpected interface/dependency changes, security or data-integrity impact, unavailable validation, material scope expansion, or two failed attempts.
 

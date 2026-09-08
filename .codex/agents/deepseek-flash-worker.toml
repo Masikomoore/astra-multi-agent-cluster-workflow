@@ -1,7 +1,6 @@
 name = "deepseek_flash_worker"
 description = "Cheap daily worker (deepseek-v4-flash). Shares the cheap-daily pool with luna_worker; Astra picks by .codex/agents/cheap-daily.toml ratio. Close to Luna; mix by site concurrency."
 model = "deepseek-v4-flash"
-model_reasoning_effort = "high"
 sandbox_mode = "workspace-write"
 
 developer_instructions = """

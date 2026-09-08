@@ -1,7 +1,6 @@
 name = "grok_worker"
 description = "Grok 4.6 specialist: preferred fast-development worker, also multimodal (text+image), live web/X search, and current events."
 model = "grok-4.6"
-model_reasoning_effort = "high"
 sandbox_mode = "workspace-write"
 
 developer_instructions = """

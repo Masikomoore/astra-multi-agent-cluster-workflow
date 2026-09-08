@@ -9,6 +9,9 @@ One of: sol_worker, grok_worker, gemini_flash_worker,
 luna_worker, deepseek_flash_worker, qwen_flash_worker,
 qwen_uncensored_worker.
 
+## Reasoning effort
+One allowed value for that model, chosen by Astra (see AGENTS.md).
+
 ## Relevant context
 Only approved facts and decisions needed for execution.
 
