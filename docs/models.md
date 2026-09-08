@@ -15,6 +15,8 @@ Facts below are from vendor docs and Hugging Face cards as of 2026-09-07. They d
 
 Cheap daily mix is `.codex/agents/cheap-daily.toml` (`luna` : `deepseek` per 10 assignments). Default `0:10` (DeepSeek-V4-Flash) because many relay gateways have blocked Luna.
 
+Reasoning effort is hardcoded on each agent (`model_reasoning_effort` in the TOML). Astra does not pick effort when dispatching; Codex applies the spawned file's value. Primary Astra is `xhigh`. Unnamed subagent fallback is `high`.
+
 ## gpt-6-astra
 
 OpenAI's first GPT-6 model. Official description: most capable model, built for the hardest end-to-end work (computer use, browsing, software engineering, science, professional work). Supports multi-agent orchestration, async tool calling, and mid-turn steering.

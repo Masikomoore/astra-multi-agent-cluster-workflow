@@ -39,6 +39,24 @@ Keep a running count in the current session so the mix stays close to the ratio.
 
 See [docs/models.md](docs/models.md) for published capabilities and [docs/providers.md](docs/providers.md) for provider parameters.
 
+## Reasoning effort
+
+Effort is **hardcoded in each agent file**, not chosen by Astra at dispatch time. Codex uses the spawned agent's `model_reasoning_effort` when that field is set; the primary thread must not try to override it.
+
+| Who | Effort |
+| --- | --- |
+| Primary `gpt-6-astra` | `xhigh` |
+| `sol_worker` | `high` |
+| `grok_worker` | `high` |
+| `gemini_flash_worker` | `high` |
+| `deepseek_flash_worker` | `high` |
+| `qwen_flash_worker` | `high` |
+| `qwen_uncensored_worker` | `medium` |
+| `luna_worker` | `max` |
+| unnamed subagent fallback | `high` (from `default_subagent_reasoning_effort`) |
+
+To change effort, edit the agent TOML (or `.codex/config.toml` for the primary / unnamed fallback). Do not invent per-packet effort in the dispatch prompt.
+
 ## Dispatch rules
 
 Parallelize only when:
