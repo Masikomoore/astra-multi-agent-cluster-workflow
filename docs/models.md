@@ -10,7 +10,7 @@ Facts below are from vendor docs and Hugging Face cards as of 2026-09-07. They d
 | Multimodal / SEOGEO / human-like Chinese writing | `gemini_flash_worker` | `gemini-3.8-flash` | `low` `medium` `high` |
 | Cheap daily (mixed) | `deepseek_flash_worker` | `deepseek-v4-flash` | thinking `high` `max` |
 | Cheap Chinese / office | `qwen_flash_worker` | `Qwen3.8-Flash-Next` | `low` `medium` `xhigh` |
-| Reduced-refusal | `qwen_uncensored_worker` | `qwen3.8-27b` | `low` `medium` |
+| Reduced-refusal | `qwen_uncensored_worker` | `qwen3.8-27b` | `medium` `xhigh` |
 | Cheap daily (mixed) | `luna_worker` | `gpt-5.6-luna` | `none` `low` `medium` `high` `xhigh` `max` |
 
 Cheap daily mix is `.codex/agents/cheap-daily.toml` (`luna` : `deepseek` per 10 assignments). Default `0:10` (DeepSeek-V4-Flash) because many relay gateways have blocked Luna.
@@ -86,6 +86,7 @@ Base Qwen3.8-27B is a 27B dense vision-language model (Apache-2.0, 262k native c
 - Latest ablation: layers 18–51; MTP and vision unmodified
 - Ollama: `huihui_ai/Qwen3.8-abliterated`
 - Huihui card: crude proof-of-concept; reduced safety filtering; research/controlled use
+- Reasoning effort in this workflow: `medium` or `xhigh` only
 
 `qwen_uncensored_worker` still must not provide operational assistance for violent crime or child sexual exploitation.
 

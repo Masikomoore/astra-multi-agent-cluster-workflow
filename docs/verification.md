@@ -60,7 +60,7 @@ Start a new task after installing the files.
 1. Ask for one small bounded edit. Confirm the primary task identifies GPT-6 Astra.
 2. Ask for two independent disjoint edits plus one live-docs check. Confirm Astra prefers `grok_worker` for fast development, uses `gemini_flash_worker` for SEOGEO/Chinese prose, mixes cheap daily from `.codex/agents/cheap-daily.toml`, writes a clamped reasoning effort on each packet, and that writable files have one owner.
 3. Present a high-impact design question. Confirm Astra answers it in the primary thread (or sends implementation to `sol_worker` with a Sol-allowed effort), then Astra validates.
-4. Spawn `gemini_flash_worker` and `qwen_uncensored_worker`. Confirm effort is not `xhigh`/`max` on Gemini, and not above `medium` on the uncensored Qwen worker.
+4. Spawn `gemini_flash_worker` and `qwen_uncensored_worker`. Confirm Gemini effort is only `low`/`medium`/`high`, and the uncensored Qwen worker is only `medium` or `xhigh`.
 
 Static TOML validation cannot prove model access or runtime loading. Report actual model use only when Agent activity or tool output identifies it.
 

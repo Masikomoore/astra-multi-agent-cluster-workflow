@@ -54,7 +54,7 @@ Never send an unsupported value (many gateways return HTTP 400). Pick a task lev
 | `gemini_flash_worker` | `gemini-3.8-flash` | `low`, `medium`, `high` | `none`, `minimal`, `xhigh`, `max` | writing: `medium` |
 | `deepseek_flash_worker` | `deepseek-v4-flash` | thinking: `high`, `max` | `medium`, `xhigh` | cheap daily: `high` |
 | `qwen_flash_worker` | `Qwen3.8-Flash-Next` | `low`, `medium`, `xhigh` (and `none` to skip think) | `high`, `max` | `medium`; map wanted `high` → `xhigh` |
-| `qwen_uncensored_worker` | `qwen3.8-27b` | `low`, `medium` | `high`, `xhigh`, `max` (this checkpoint can loop) | `medium` |
+| `qwen_uncensored_worker` | `qwen3.8-27b` | `medium`, `xhigh` | `none`, `low`, `high`, `max` | `medium`; map wanted `high`/`max` → `xhigh` |
 
 Task heuristic before clamp:
 
