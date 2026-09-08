@@ -49,7 +49,7 @@ All of these model IDs use the same provider in the examples.
 
 Grok 4.6 and Gemini 3.8 Flash are both multimodal and capable of fast development. **Prefer Grok 4.6 for speed.** Gemini also covers SEOGEO, Chinese articles, and human-like prose.
 
-Cheap daily packets are mixed from `.codex/agents/cheap-daily.toml`. `luna = 4` and `deepseek = 6` means 4 Luna and 6 DeepSeek out of 10. Use `10:0` or `0:10` to pin one side. They are close; pick the mix from site concurrency.
+Cheap daily packets are mixed from `.codex/agents/cheap-daily.toml`. Default is `luna = 0`, `deepseek = 10` (DeepSeek-V4-Flash only) because many relay gateways have blocked `gpt-5.6-luna`. Set `4`/`6` for 4 Luna and 6 DeepSeek out of 10, or `10:0` for Luna only.
 
 See [docs/models.md](docs/models.md) for vendor capabilities.
 

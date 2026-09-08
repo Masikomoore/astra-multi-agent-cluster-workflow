@@ -19,8 +19,8 @@ agents = {
 
 assert config['model'] == 'gpt-6-astra'
 assert config['model_reasoning_effort'] == 'xhigh'
-assert config['agents']['default_subagent_model'] == 'gpt-5.6-luna'
-assert config['agents']['default_subagent_reasoning_effort'] == 'max'
+assert config['agents']['default_subagent_model'] == 'deepseek-v4-flash'
+assert config['agents']['default_subagent_reasoning_effort'] == 'high'
 assert config['agents']['max_concurrent_threads_per_session'] == 8
 
 cheap = tomllib.loads((root / 'agents' / 'cheap-daily.toml').read_text())

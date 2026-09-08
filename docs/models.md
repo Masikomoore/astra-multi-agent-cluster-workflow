@@ -13,7 +13,7 @@ Facts below are from vendor docs and Hugging Face cards as of 2026-09-07. They d
 | Reduced-refusal | `qwen_uncensored_worker` | `qwen3.8-27b` | `medium` |
 | Cheap daily (mixed) | `luna_worker` | `gpt-5.6-luna` | `max` |
 
-Cheap daily mix is `.codex/agents/cheap-daily.toml` (`luna` : `deepseek` per 10 assignments).
+Cheap daily mix is `.codex/agents/cheap-daily.toml` (`luna` : `deepseek` per 10 assignments). Default `0:10` (DeepSeek-V4-Flash) because many relay gateways have blocked Luna.
 
 ## gpt-6-astra
 
@@ -89,4 +89,4 @@ Base Qwen3.8-27B is a 27B dense vision-language model (Apache-2.0, 262k native c
 
 ## gpt-5.6-luna
 
-Cheap daily pool with DeepSeek. Mix via `.codex/agents/cheap-daily.toml`. Also `default_subagent_model` when Codex needs a fallback spawn.
+Cheap daily pool with DeepSeek. Mix via `.codex/agents/cheap-daily.toml`. Also `default_subagent_model` when Codex needs a fallback spawn. Default mix is DeepSeek-only because many relay gateways have blocked Luna.

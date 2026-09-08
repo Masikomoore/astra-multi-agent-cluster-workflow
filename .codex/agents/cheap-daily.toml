@@ -1,14 +1,15 @@
 name = "cheap_daily"
 description = "Cheap-daily mix config. Do not spawn. Astra reads luna and deepseek weights per 10 assignments."
-model = "gpt-5.6-luna"
-model_reasoning_effort = "max"
+model = "deepseek-v4-flash"
+model_reasoning_effort = "high"
 sandbox_mode = "read-only"
 
 # luna : deepseek, counted per 10 cheap-daily assignments.
 # Example 4:6 → 4× luna_worker, 6× deepseek_flash_worker
 # 10:0 → only Luna; 0:10 → only DeepSeek
-luna = 5
-deepseek = 5
+# Default 0:10: many relay/gateway sites have blocked gpt-5.6-luna.
+luna = 0
+deepseek = 10
 
 developer_instructions = """
 This file is mix configuration, not a worker. Do not implement packets.
