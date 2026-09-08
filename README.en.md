@@ -8,6 +8,12 @@ GPT-6 Astra is the advisor and orchestrator. It splits work into disjoint packet
 
 Model-calling examples in this repo use the GPT-稳定 group on [xclis.ai](https://xclis.ai). Swap `base_url` and `env_key` for whatever provider you prefer.
 
+Install in your own Codex with one sentence. Paste this prompt so Codex can analyze the project and install it globally:
+
+```text
+Analyze and learn this project, then install it globally in Codex: https://github.com/Easy800/astra-multi-agent-cluster-workflow
+```
+
 ## What this project does
 
 1. **Astra advises and accepts.** High-impact decisions stay in the primary thread. Workers execute bounded packets and never claim final acceptance.
@@ -80,7 +86,13 @@ Change only the `model` field to any ID in the roster. More replacement notes: [
 
 ## Install
 
-Merge `.codex/config.toml`, `.codex/agents/*.toml`, and `AGENTS.md` into a project, then start a **new** Codex task.
+One-sentence install in your own Codex:
+
+```text
+Analyze and learn this project, then install it globally in Codex: https://github.com/Easy800/astra-multi-agent-cluster-workflow
+```
+
+Or merge `.codex/config.toml`, `.codex/agents/*.toml`, and `AGENTS.md` into a project, then start a **new** Codex task.
 
 A custom agent needs `name`, `description`, and `developer_instructions`. Copy agent files to `~/.codex/agents/` for personal use.
 
