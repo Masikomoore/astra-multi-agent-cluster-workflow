@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- README install links now point to the Masikomoore repository.
 - README pitch: Astra as chief dispatcher so Plus is not limited to a few sentences; star if useful.
 - README one-sentence Codex install: analyze this repo, then install it globally.
 - Task-category routing table in `AGENTS.md` (owner, never-assign, reviewer per category), cross-model review rule, escalation ladder, and a task-fit evidence section in `docs/models.md`.

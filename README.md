@@ -13,7 +13,7 @@
 在自己的 Codex 里用一句话安装：把下面发给 Codex，分析和学习这个项目后做全局安装。
 
 ```text
-分析和学习这个项目后全局安装在codex里：https://github.com/Easy800/astra-multi-agent-cluster-workflow
+分析和学习这个项目后全局安装在codex里：https://github.com/Masikomoore/astra-multi-agent-cluster-workflow
 ```
 
 ## 项目特点
@@ -103,7 +103,7 @@ curl "$CODEX_BASE_URL/responses" \
 在自己的 Codex 里用一句话安装：
 
 ```text
-分析和学习这个项目后全局安装在codex里：https://github.com/Easy800/astra-multi-agent-cluster-workflow
+分析和学习这个项目后全局安装在codex里：https://github.com/Masikomoore/astra-multi-agent-cluster-workflow
 ```
 
 也可以把这些文件合并进目标项目，然后 **新开一个 Codex 任务**：

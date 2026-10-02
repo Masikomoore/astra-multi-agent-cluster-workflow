@@ -13,7 +13,7 @@ Model-calling examples in this repo use the GPT-稳定 group on [xclis.ai](https
 Install in your own Codex with one sentence. Paste this prompt so Codex can analyze the project and install it globally:
 
 ```text
-Analyze and learn this project, then install it globally in Codex: https://github.com/Easy800/astra-multi-agent-cluster-workflow
+Analyze and learn this project, then install it globally in Codex: https://github.com/Masikomoore/astra-multi-agent-cluster-workflow
 ```
 
 ## What this project does
@@ -87,7 +87,7 @@ Change only the `model` field to any ID in the roster. More replacement notes: [
 One-sentence install in your own Codex:
 
 ```text
-Analyze and learn this project, then install it globally in Codex: https://github.com/Easy800/astra-multi-agent-cluster-workflow
+Analyze and learn this project, then install it globally in Codex: https://github.com/Masikomoore/astra-multi-agent-cluster-workflow
 ```
 
 Or merge `.codex/config.toml`, `.codex/agents/*.toml`, and `AGENTS.md` into a project, then start a **new** Codex task.
