@@ -1,21 +1,18 @@
 # Model roster
 
-Facts below are from vendor docs and Hugging Face cards as of 2026-09-07. They describe published capabilities for routing. They are not runtime proof that Codex loaded the model. Provider parameters for the examples are in [providers.md](providers.md).
+Facts below are from vendor docs checked on 2026-10-01. They describe published capabilities for routing. They are not runtime proof that Codex loaded the model. Provider parameters for the examples are in [providers.md](providers.md).
 
 | Role | Agent | Model ID | Allowed effort (Astra clamps to this) |
 | --- | --- | --- | --- |
 | Advisor / orchestrator | primary thread | `gpt-6-astra` | `low` `medium` `high` `xhigh` `max` (no `none`) |
-| Hard professional worker | `sol_worker` | `gpt-5.6-sol` | `none` `low` `medium` `high` `xhigh` `max` |
-| Fast development (preferred) | `grok_worker` | `grok-4.6` | `low` `medium` `high` `xhigh` |
+| Hard professional worker | `sol_worker` | `gpt-6.1-sol` | `low` `medium` `high` `xhigh` `max` (no `none`, no `minimal`) |
+| Fast development (preferred) | `grok_worker` | `grok-4.7` | `low` `medium` `high` `xhigh` (`none` and `max` are not documented; not sent) |
+| Cheap daily | `luna_worker` | `gpt-6-luna` | `low` `medium` `high` `xhigh` `max` (`none` is accepted by the vendor but never sent here) |
 | Multimodal / SEOGEO / human-like Chinese writing | `gemini_flash_worker` | `gemini-3.8-flash` | `low` `medium` `high` |
-| Cheap daily (mixed) | `deepseek_flash_worker` | `deepseek-v4-flash` | thinking `high` `max` |
-| Cheap Chinese / office | `qwen_flash_worker` | `Qwen3.8-Flash-Next` | `low` `medium` `xhigh` |
-| Reduced-refusal | `qwen_uncensored_worker` | `qwen3.8-27b` | `medium` `xhigh` |
-| Cheap daily (mixed) | `luna_worker` | `gpt-5.6-luna` | `none` `low` `medium` `high` `xhigh` `max` |
 
-Cheap daily mix is `.codex/agents/cheap-daily.toml` (`luna` : `deepseek` per 10 assignments). Default `0:10` (DeepSeek-V4-Flash) because many relay gateways have blocked Luna.
+Astra chooses effort per packet, then clamps to the allowed set above. Worker TOML files do not pin `model_reasoning_effort`. Primary session default is `xhigh`. Unnamed subagent fallback is `grok-4.7` at `high`. Dispatch rules: [AGENTS.md](../AGENTS.md).
 
-Astra chooses effort per packet, then clamps to the allowed set above. Worker TOML files do not pin `model_reasoning_effort`. Primary session default is `xhigh`. Unnamed subagent fallback is `high`. Dispatch rules: [AGENTS.md](../AGENTS.md).
+Codex also applies a local catalog (`model_catalog_json`) that can set a smaller working context than the vendor maximum. Check it if a packet is near the limits below.
 
 ## gpt-6-astra
 
@@ -28,24 +25,28 @@ OpenAI's first GPT-6 model. Official description: most capable model, built for 
 
 Sources: [model page](https://developers.openai.com/api/docs/models/gpt-6-astra), [model guide](https://developers.openai.com/api/docs/guides/latest-model), [announcement](https://openai.com/index/gpt-6-astra/)
 
-## gpt-5.6-sol
+## gpt-6.1-sol
 
-GPT-5.6 flagship (`gpt-5.6` alias routes here). Complex professional work, coding, cybersecurity, science. In this workflow it is `sol_worker`, not the advisor.
+`sol_worker`. The high-stakes professional worker, not the advisor. Vendor description: near-Astra performance at lower cost for complex coding, computer use, and professional work.
 
-- Context 1,050,000; max output 128,000; knowledge cutoff 2026-02-16
-- Promotional price at least through 2026-11-21: $4 / $20 per 1M
-- Native in Codex; use when Astra needs Sol-class execution without spending Astra tokens on the packet
+- Context 1,050,000; max output 128,000; knowledge cutoff 2026-04-30
+- Input text and image; output text
+- Reasoning: `low` / `medium` (default) / `high` / `xhigh` / `max`. `none` and `minimal` are unsupported
+- Price: $2 / $10 per 1M input/output ($0.10 cached input); prompts over 272k input are billed at 2x input and 1.5x output
 
-Source: [model page](https://developers.openai.com/api/docs/models/gpt-5.6-sol)
+Source: [model page](https://developers.openai.com/api/docs/models/gpt-6.1-sol)
 
-## deepseek-v4-flash
+## gpt-6-luna
 
-DeepSeek-V4 Flash: 284B MoE / 13B active. Fast, efficient, economical. Reasoning approaches V4-Pro; simple agent tasks are similar; hardest agent work still favors Pro.
+`luna_worker`. The cheap daily worker.
 
-- 1M context; max output 384k; thinking and non-thinking; tools and JSON
-- Cheap daily pool with Luna; mix via `.codex/agents/cheap-daily.toml`. Close to Luna; concurrency may decide the weights.
+- Context 1,050,000 (max input 922,000); max output 128,000; knowledge cutoff 2026-05-18
+- Input text and image; output text
+- Reasoning: `none` / `low` / `medium` (default) / `high` / `xhigh` / `max`. This pack never sends `none`
+- Price: $0.10 / $0.50 per 1M input/output ($0.01 cached input); prompts over 272k are billed at 2x input and 1.5x output
+- Supports function calling, web search, code interpreter, and computer use on the Responses API. The vendor notes that on Chat Completions, function calling only works with `reasoning_effort` set to `none`; Codex uses the Responses API
 
-Sources: [V4 preview](https://api-docs.deepseek.com/news/news260424/), [pricing](https://api-docs.deepseek.com/quick_start/pricing), [HF weights](https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash)
+Source: [model page](https://developers.openai.com/api/docs/models/gpt-6-luna)
 
 ## gemini-3.8-flash
 
@@ -57,39 +58,33 @@ Google's most intelligent Flash model, GA around 2026-09-02. Multimodal and able
 
 Sources: [Gemini API latest model](https://ai.google.dev/gemini-api/docs/latest-model), [Cloud model page](https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/gemini/3-8-flash), [model card](https://deepmind.google/models/model-cards/gemini-3-8-flash/)
 
-## grok-4.6
+## grok-4.7
 
-xAI frontier model for coding, agentic tasks, and knowledge work. Default in Grok Build. In this workflow it is the **preferred fast-development** worker; also multimodal (text+image).
+`grok_worker`. Preferred for speed, multimodal work, live web/X search, and current events. Also the unnamed-subagent fallback model.
 
-- Context 500,000; text+image in, text out; knowledge cutoff 2026-02-01
-- Reasoning: `low` / `medium` / `high` (default) / `xhigh`
-- Price: $2 / $6 per 1M below 200k prompt tokens; double above that
+- Context 500,000; no stated text output limit; knowledge cutoff May 2026
+- Input text and image; output text
+- Reasoning: `low` / `medium` / `high` (default) / `xhigh`. The docs do not list `none` or `max`, so neither is sent
+- Price: $2 / $6 per 1M input/output below 200k prompt tokens (xAI pricing lists higher rates above that); `grok-4.7-fast` costs 2x
 - Tools: function calling, web search, X search, code execution
+- Responses API always returns `reasoning.encrypted_content`. xAI recommends setting `prompt_cache_key` for reliable cache hits
 
-Sources: [Grok 4.6 docs](https://docs.x.ai/developers/grok-4-6), [release notes](https://x.ai/docs/release-notes), [announcement](https://x.ai/news/grok-4-6)
+Sources: [xAI model page](https://docs.x.ai/developers/grok-4-7), [release notes](https://docs.x.ai/developers/release-notes)
 
-## Qwen3.8-Flash-Next
+## Task-fit evidence (as of 2026-10-01)
 
-Open weights are `Qwen/Qwen3.8-Flash-Next` (Qwen4 architecture preview). This workflow uses catalog id `Qwen3.8-Flash-Next`.
+These notes back the routing table in [AGENTS.md](../AGENTS.md). Most come from third-party comparison sites and vendor-reported benchmarks, and the sources disagree on some numbers (for example, whether Astra or Sol leads on agentic coding). Treat the table as a starting heuristic and measure completion rate on your own packets before tightening it.
 
-- ~125B MoE + n-gram embeddings, ~6B active/token
-- Strong coding/office; cheap long context; especially good for Chinese packets
+| Model | Reported fit | Reported weak spots |
+| --- | --- | --- |
+| `gpt-6-astra` | Strongest on computer use (OSWorld 2.0: 72.6 vs Sol 60.5 vs Luna 58.1); long engineering where errors cascade. GUI packets still go to `sol_worker` in this pack, with Astra reviewing the end state | Cost (about 5x Sol); rated "Critical" for cybersecurity, so it can refuse proof-of-concept exploit work |
+| `gpt-6.1-sol` | Default for code changes, debugging, and report drafting; near-Astra on DeepSWE and Agents' Last Exam at about one-fifth the cost; fewer security restrictions than Astra | Unattended long-horizon runs |
+| `gpt-6-luna` | Summarization, extraction, classification, tagging, high-volume work; only about 2 points behind Sol on DeepSWE (66.6 vs 68.8, both at max effort) | Long agentic chains where accuracy compounds; no published results on complex multi-part projects |
+| `grok-4.7` | Agentic coding (Artificial Analysis Coding Agent Index 56, up from 47); about 188 tokens/s so multi-step loops finish sooner; hallucination rate 29% (down from 34%); live web/X search | Token-heavy at `xhigh`; community reports of weak frontend and 3D work (anecdotal); accuracy flat at 47% |
+| `gemini-3.8-flash` | Multimodal (text, image, audio, video, PDF), 1M context, document-heavy workflows; vendor reports a strong DeepSWE result | Verbose at higher thinking levels; no parallel tool calls in the local catalog |
 
-Sources: [HF Flash-Next](https://huggingface.co/Qwen/Qwen3.8-Flash-Next), [百炼 qwen3.8-flash](https://help.aliyun.com/zh/model-studio/qwen3-8-flash)
+The Chinese-writing and SEOGEO assignment for `gemini_flash_worker` carries over from the earlier config. The sources above did not independently confirm it.
 
-## qwen3.8-27b (Huihui abliterated)
+Role-split practice behind the "review by" column: one accountable orchestrator, bounded workers, and an independent verifier. A model should not be the only reviewer of its own change, and deterministic work goes to scripts.
 
-Base Qwen3.8-27B is a 27B dense vision-language model (Apache-2.0, 262k native context). This workflow uses the Huihui abliterated checkpoint so the worker can accept special instructions that aligned models refuse.
-
-- Weights: [huihui-ai/Huihui-Qwen3.8-27B-abliterated](https://huggingface.co/huihui-ai/Huihui-Qwen3.8-27B-abliterated)
-- Local quant named by this repo's users: Q4_K GGUF under [huihui-ai/Huihui-Qwen3.8-27B-abliterated-GGUF](https://huggingface.co/huihui-ai/Huihui-Qwen3.8-27B-abliterated-GGUF)
-- Latest ablation: layers 18–51; MTP and vision unmodified
-- Ollama: `huihui_ai/Qwen3.8-abliterated`
-- Huihui card: crude proof-of-concept; reduced safety filtering; research/controlled use
-- Reasoning effort in this workflow: `medium` or `xhigh` only
-
-`qwen_uncensored_worker` still must not provide operational assistance for violent crime or child sexual exploitation.
-
-## gpt-5.6-luna
-
-Cheap daily pool with DeepSeek. Mix via `.codex/agents/cheap-daily.toml`. Also `default_subagent_model` when Codex needs a fallback spawn. Default mix is DeepSeek-only because many relay gateways have blocked Luna.
+Sources: [GPT-6 Sol vs Astra vs Luna](https://aitoolsreview.co.uk/insights/gpt-6-sol-vs-astra-vs-luna), [GPT-6.1 Sol vs GPT-6 Astra](https://aiagentstore.ai/ai-models/compare/gpt-6-1-sol-vs-gpt-6-astra), [Benchmarking Grok 4.7](https://artificialanalysis.ai/articles/benchmarking-grok-4-7), [Grok 4.7 review](https://www.stork.ai/blog/xais-grok-47-is-a-deceptive-upgrade), [Gemini 3.8 Flash review](https://blog.buildfastwithai.com/gemini-3-8-flash-review), [Multi-model coding agent stack](https://wavect.io/blog/multi-model-ai-coding-agent-stack-2026/)

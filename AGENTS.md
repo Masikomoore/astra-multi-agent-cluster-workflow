@@ -21,23 +21,39 @@ Assign by task attributes, not by habit. If the needed model is unavailable, say
 
 | Agent | Model | Assign when |
 | --- | --- | --- |
-| `sol_worker` | `gpt-5.6-sol` | Architecture, security, science, compatibility, root-cause, or other high-stakes professional packets. |
-| `grok_worker` | `grok-4.6` | Preferred for fast development. Also multimodal (text+image), live web/X search, current events. |
+| `sol_worker` | `gpt-6.1-sol` | Architecture, security, science, compatibility, root-cause, or other high-stakes professional packets. |
+| `grok_worker` | `grok-4.7` | Preferred for fast development. Also multimodal (text+image), live web/X search, current events. |
+| `luna_worker` | `gpt-6-luna` | Cheap daily execution: routine implementation, tests, exploration, and documentation. |
 | `gemini_flash_worker` | `gemini-3.8-flash` | Multimodal and capable of fast development, but not the first pick for speed. Prefer this for SEOGEO, Chinese articles, and human-like prose. |
-| `qwen_flash_worker` | `Qwen3.8-Flash-Next` | Cheap 1M-context coding/office work, especially Chinese-language packets that are not article/SEOGEO writing. |
-| `qwen_uncensored_worker` | `qwen3.8-27b` | Reduced-refusal / special-instruction packets that aligned models decline. Huihui abliterated Qwen3.8-27B (Q4_K for local). |
-| `luna_worker` | `gpt-5.6-luna` | Cheap daily execution pool (with DeepSeek). See mix below. |
-| `deepseek_flash_worker` | `deepseek-v4-flash` | Cheap daily execution pool (with Luna). Close to Luna; concurrency may decide the mix. |
 
-### Cheap daily mix
+There is no cheap-daily mix and no Qwen or DeepSeek worker. Routine packets go to `luna_worker`. Fast development goes to `grok_worker`. Writing goes to `gemini_flash_worker`. Do not spawn `deepseek_flash_worker`, `qwen_flash_worker`, `qwen_uncensored_worker`, or `cheap_daily`.
 
-Routine, low-risk, disjoint packets that do not need Grok/Gemini/Sol/Qwen strengths go to the cheap daily pool.
+## Task-category routing
 
-Read `.codex/agents/cheap-daily.toml` before assigning those packets (if that file is missing, try `~/.codex/agents/cheap-daily.toml`). Do not spawn `cheap_daily`. `luna` and `deepseek` are weights per 10 assignments. Default is `0`/`10` (DeepSeek-V4-Flash only) because many relay gateways have blocked `gpt-5.6-luna`. Example `4` and `6` means 4 Luna, 6 DeepSeek out of 10. `10:0` is Luna only.
+Classify each packet into one category, then use that row. "Never" means do not assign even if the worker could do it; escalate instead.
 
-Keep a running count in the current session so the mix stays close to the ratio. If only one cheap packet is needed, sample with probability `luna / (luna + deepseek)`. Do not invent a third cheap model.
+| Category | Owner | Never | Review by |
+| --- | --- | --- | --- |
+| Architecture, root cause, high-impact decisions | Astra (primary) | any worker decides alone | Astra |
+| Security, auth, crypto, payments, destructive migration, data integrity | `sol_worker` implements within Astra's constraints | `luna_worker`; `gemini_flash_worker` | Astra, plus a different-model check when the diff is non-trivial |
+| Non-trivial debugging or cross-module change | `sol_worker` | `luna_worker` | `grok_worker` or Astra |
+| Bounded feature work with a clear spec; rapid iteration loops | `grok_worker` | long unattended chains at `xhigh` | `sol_worker` for risky diffs, otherwise Astra |
+| Live facts: web/X search, current events, post-cutoff docs | `grok_worker` (must cite sources) | other workers answering from memory | Astra spot-checks sources |
+| Routine, high-volume, low-risk: tests for known behavior, mechanical edits, summaries, extraction, classification, log triage, docs | `luna_worker` | multi-step work where an early mistake compounds; anything that needs `high` or above | `grok_worker` or Astra |
+| Audio, video, PDF, or corpus larger than ~450k tokens | `gemini_flash_worker` | the others (grok-4.7 takes text+image only, ~450k working context) | Astra |
+| Chinese articles, SEOGEO, human-like prose | `gemini_flash_worker` | `luna_worker` for final copy | Astra |
+| Screenshot or image reading | `grok_worker` or `gemini_flash_worker` | text-only routes | Astra |
+| Browser, desktop, GUI, or form-filling automation | `sol_worker` | `luna_worker`; `grok_worker`; `gemini_flash_worker` | Astra, with visible state and action logs |
+| Formatting, linting, codemods, other deterministic work | a script, not a model | all workers | the script's exit code |
 
-See [docs/models.md](docs/models.md) for published capabilities and [docs/providers.md](docs/providers.md) for provider parameters.
+Rules that cut across categories:
+
+- The reviewer must not be the same model as the implementer. Pick the reviewer from the table, not from whichever agent is idle.
+- Escalate one step on two failed attempts: `luna_worker` → `grok_worker` → `sol_worker` → Astra.
+- Anything that publishes, pays, deletes, or messages externally stays in Astra, regardless of category.
+- If a packet fits two rows, take the higher-risk row.
+
+See [docs/models.md](docs/models.md) for published capabilities and the evidence behind this table, and [docs/providers.md](docs/providers.md) for provider parameters.
 
 ## Reasoning effort
 
@@ -48,23 +64,22 @@ Never send an unsupported value (many gateways return HTTP 400). Pick a task lev
 | Agent | Model | Allowed `model_reasoning_effort` | Do not send | If unsure |
 | --- | --- | --- | --- | --- |
 | primary | `gpt-6-astra` | `low`, `medium`, `high`, `xhigh`, `max` | `none` | keep session `xhigh` |
-| `sol_worker` | `gpt-5.6-sol` | `none`, `low`, `medium`, `high`, `xhigh`, `max` | — | `high` |
-| `luna_worker` | `gpt-5.6-luna` | `none`, `low`, `medium`, `high`, `xhigh`, `max` | — | cheap daily: `low` |
-| `grok_worker` | `grok-4.6` | `low`, `medium`, `high`, `xhigh` | `none`, `max` | fast dev: `medium` |
+| `sol_worker` | `gpt-6.1-sol` | `low`, `medium`, `high`, `xhigh`, `max` | `none`, `minimal` | `medium` (vendor default) |
+| `grok_worker` | `grok-4.7` | `low`, `medium`, `high`, `xhigh` | `none`, `max` | fast dev: `medium` |
+| `luna_worker` | `gpt-6-luna` | `low`, `medium`, `high`, `xhigh`, `max` | `none` | cheap daily: `low` |
 | `gemini_flash_worker` | `gemini-3.8-flash` | `low`, `medium`, `high` | `none`, `minimal`, `xhigh`, `max` | writing: `medium` |
-| `deepseek_flash_worker` | `deepseek-v4-flash` | thinking: `high`, `max` | `medium`, `xhigh` | cheap daily: `high` |
-| `qwen_flash_worker` | `Qwen3.8-Flash-Next` | `low`, `medium`, `xhigh` (and `none` to skip think) | `high`, `max` | `medium`; map wanted `high` → `xhigh` |
-| `qwen_uncensored_worker` | `qwen3.8-27b` | `medium`, `xhigh` | `none`, `low`, `high`, `max` | `medium`; map wanted `high`/`max` → `xhigh` |
+
+Clamps follow the vendor model pages (see [docs/models.md](docs/models.md)). `grok-4.7` documents only `low`–`xhigh`, so `none` and `max` are not sent. `gpt-6-luna` also accepts `none`, but this workflow never sends it. If a gateway returns HTTP 400 for effort, drop one allowed step and say so.
 
 Task heuristic before clamp:
 
-1. Cheap daily / mechanical edits → lowest useful allowed value.
-2. Fast development (Grok) → `medium`; bump to `high` if the packet is non-trivial; `xhigh` only after a failed attempt.
+1. Cheap daily / mechanical edits (`luna_worker`) → `low`; bump to `medium` if the packet is not trivial. If it seems to need `high`, the packet belongs to another worker.
+2. Fast development (`grok_worker`) → `medium`; bump to `high` if the packet is non-trivial; `xhigh` only after a failed attempt (it is token-heavy: one benchmark measured about 81k output tokens per task at `xhigh`).
 3. SEOGEO / Chinese / human-like writing (Gemini) → `medium`; `high` for long or high-stakes copy.
 4. Sol high-stakes → `high`; `xhigh` or `max` for architecture, security, or two failed attempts.
 5. After two evidence-based failures, bump one allowed step if the model has a higher level.
 
-Do not spawn `cheap_daily`. Unnamed subagent fallback stays `high` unless Astra names a specialist.
+Unnamed subagent fallback model is `grok-4.7`. Unnamed effort stays `high` unless Astra names a specialist.
 
 ## Dispatch rules
 

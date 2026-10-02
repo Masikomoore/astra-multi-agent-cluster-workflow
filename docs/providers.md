@@ -28,13 +28,10 @@ The same provider can call every worker model in this pack:
 
 ```text
 gpt-6-astra
-gpt-5.6-sol
-gpt-5.6-luna
-deepseek-v4-flash
+gpt-6.1-sol
+gpt-6-luna
 gemini-3.8-flash
-grok-4.6
-Qwen3.8-Flash-Next
-qwen3.8-27b
+grok-4.7
 ```
 
 ```bash
@@ -55,6 +52,4 @@ client = OpenAI(
 print(client.models.list())
 ```
 
-If a listed model is missing from `GET /v1/models`, say so and fall back through the cheap-daily mix in `.codex/agents/cheap-daily.toml`, then `sol_worker`. Never claim a specialist ran.
-
-Optional local quant for `qwen3.8-27b`: serve Huihui Q4_K GGUF as an OpenAI-compatible server and point `base_url` at it. Ollama: `ollama run huihui_ai/Qwen3.8-abliterated`.
+If a listed model is missing from `GET /v1/models`, say so. Do not claim that specialist ran. Use another listed worker only when its role still fits the packet.

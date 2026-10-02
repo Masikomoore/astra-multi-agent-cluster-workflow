@@ -14,28 +14,19 @@ config = tomllib.loads((root / 'config.toml').read_text())
 agents = {
     path.stem: tomllib.loads(path.read_text())
     for path in sorted((root / 'agents').glob('*.toml'))
-    if path.name != 'cheap-daily.toml'
 }
 
 assert config['model'] == 'gpt-6-astra'
 assert config['model_reasoning_effort'] == 'xhigh'
-assert config['agents']['default_subagent_model'] == 'deepseek-v4-flash'
+assert config['agents']['default_subagent_model'] == 'grok-4.7'
 assert config['agents']['default_subagent_reasoning_effort'] == 'high'
 assert config['agents']['max_concurrent_threads_per_session'] == 8
 
-cheap = tomllib.loads((root / 'agents' / 'cheap-daily.toml').read_text())
-assert cheap['name'] == 'cheap_daily'
-assert cheap['luna'] >= 0 and cheap['deepseek'] >= 0
-assert cheap['luna'] + cheap['deepseek'] > 0
-
 expected = {
-    'luna-worker': ('luna_worker', 'gpt-5.6-luna'),
-    'sol-worker': ('sol_worker', 'gpt-5.6-sol'),
-    'deepseek-flash-worker': ('deepseek_flash_worker', 'deepseek-v4-flash'),
+    'sol-worker': ('sol_worker', 'gpt-6.1-sol'),
     'gemini-flash-worker': ('gemini_flash_worker', 'gemini-3.8-flash'),
-    'grok-worker': ('grok_worker', 'grok-4.6'),
-    'qwen-flash-next-worker': ('qwen_flash_worker', 'Qwen3.8-Flash-Next'),
-    'qwen-uncensored-worker': ('qwen_uncensored_worker', 'qwen3.8-27b'),
+    'grok-worker': ('grok_worker', 'grok-4.7'),
+    'luna-worker': ('luna_worker', 'gpt-6-luna'),
 }
 
 assert set(agents) == set(expected)
@@ -48,7 +39,6 @@ for stem, (name, model) in expected.items():
     assert agent['developer_instructions'].strip()
     for key in ('name', 'description', 'developer_instructions'):
         assert key in agent
-assert 'model_reasoning_effort' not in cheap
 print('Static configuration checks passed.')
 PY
 ```
@@ -58,15 +48,15 @@ PY
 Start a new task after installing the files.
 
 1. Ask for one small bounded edit. Confirm the primary task identifies GPT-6 Astra.
-2. Ask for two independent disjoint edits plus one live-docs check. Confirm Astra prefers `grok_worker` for fast development, uses `gemini_flash_worker` for SEOGEO/Chinese prose, mixes cheap daily from `.codex/agents/cheap-daily.toml`, writes a clamped reasoning effort on each packet, and that writable files have one owner.
+2. Ask for two independent disjoint edits plus one live-docs check. Confirm Astra prefers `grok_worker` for fast development, `luna_worker` for routine tests, and `gemini_flash_worker` for SEOGEO/Chinese prose, writes a clamped reasoning effort on each packet, and that writable files have one owner.
 3. Present a high-impact design question. Confirm Astra answers it in the primary thread (or sends implementation to `sol_worker` with a Sol-allowed effort), then Astra validates.
-4. Spawn `gemini_flash_worker` and `qwen_uncensored_worker`. Confirm Gemini effort is only `low`/`medium`/`high`, and the uncensored Qwen worker is only `medium` or `xhigh`.
+4. Spawn `gemini_flash_worker`. Confirm Gemini effort is only `low`/`medium`/`high`.
 
 Static TOML validation cannot prove model access or runtime loading. Report actual model use only when Agent activity or tool output identifies it.
 
 ## Fallbacks
 
-- If a configured model is missing from the provider catalog, report the gap and fall back through the cheap-daily mix, then `sol_worker`.
+- If a configured model is missing from the provider catalog, report the gap. Use another listed worker only when its role still fits the packet.
 - If GPT-6 Astra is unavailable, stop or explicitly document the substitute orchestrator.
 - If custom agents are unavailable, select GPT-6 Astra as the main model and name specialists in the prompt.
 - If parallelism adds more coordination than value, use `ASTRA_LOCAL`.

@@ -19,7 +19,7 @@ Analyze and learn this project, then install it globally in Codex: https://githu
 ## What this project does
 
 1. **Astra advises and accepts.** High-impact decisions stay in the primary thread. Workers execute bounded packets and never claim final acceptance.
-2. **Dispatch by published strengths.** Prefer Grok 4.6 for fast development. Use Gemini 3.8 for multimodal SEOGEO and human-like Chinese writing. Mix Luna and DeepSeek for cheap daily work.
+2. **Dispatch by published strengths.** Prefer Grok 4.7 for fast development. Use Gemini 3.8 for multimodal SEOGEO and human-like Chinese writing. Use GPT-6.1 Sol for high-stakes professional work.
 3. **Parallelism requires disjoint writable files.** One owner per file.
 4. **Files on disk do not prove a model ran.** Report a model only when agent activity or a tool result identifies it.
 
@@ -48,16 +48,12 @@ All of these model IDs use the same provider in the examples.
 | Role | Agent | Model ID |
 | --- | --- | --- |
 | Advisor / orchestrator | primary | `gpt-6-astra` |
-| High-stakes professional work | `sol_worker` | `gpt-5.6-sol` |
-| Fast development (preferred) | `grok_worker` | `grok-4.6` |
+| High-stakes professional work | `sol_worker` | `gpt-6.1-sol` |
+| Fast development (preferred) | `grok_worker` | `grok-4.7` |
+| Cheap daily | `luna_worker` | `gpt-6-luna` |
 | Multimodal / SEOGEO / human-like Chinese writing | `gemini_flash_worker` | `gemini-3.8-flash` |
-| Cheap daily | `luna_worker` and `deepseek_flash_worker` by ratio | `gpt-5.6-luna` / `deepseek-v4-flash` |
-| Chinese / office | `qwen_flash_worker` | `Qwen3.8-Flash-Next` |
-| Reduced-refusal | `qwen_uncensored_worker` | `qwen3.8-27b` |
 
-Grok 4.6 and Gemini 3.8 Flash are both multimodal and capable of fast development. **Prefer Grok 4.6 for speed.** Gemini also covers SEOGEO, Chinese articles, and human-like prose. Astra picks reasoning effort per packet and clamps it to what that model allows (see `AGENTS.md`).
-
-Cheap daily packets are mixed from `.codex/agents/cheap-daily.toml`. Default is `luna = 0`, `deepseek = 10` (DeepSeek-V4-Flash only) because many relay gateways have blocked `gpt-5.6-luna`. Set `4`/`6` for 4 Luna and 6 DeepSeek out of 10, or `10:0` for Luna only.
+Grok 4.7 and Gemini 3.8 Flash are both multimodal and capable of fast development. **Prefer Grok 4.7 for speed.** Gemini also covers SEOGEO, Chinese articles, and human-like prose. `luna_worker` (`gpt-6-luna`) handles cheap daily work. Astra picks reasoning effort per packet and clamps it to what that model allows (see `AGENTS.md`).
 
 See [docs/models.md](docs/models.md) for vendor capabilities.
 
