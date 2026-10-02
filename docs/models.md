@@ -10,7 +10,7 @@ Facts below are from vendor docs checked on 2026-10-01. They describe published 
 | Cheap daily | `luna_worker` | `gpt-6-luna` | `low` `medium` `high` `xhigh` `max` (`none` is accepted by the vendor but never sent here) |
 | Multimodal / SEOGEO / human-like Chinese writing | `gemini_flash_worker` | `gemini-3.8-flash` | `low` `medium` `high` |
 
-Astra chooses effort per packet, then clamps to the allowed set above. Worker TOML files do not pin `model_reasoning_effort`. Primary session default is `xhigh`. Unnamed subagent fallback is `grok-4.7` at `high`. Dispatch rules: [AGENTS.md](../AGENTS.md).
+Astra chooses effort per packet, then clamps to the allowed set above. Worker TOML files do not pin `model_reasoning_effort`. Primary session default is `xhigh`. Unnamed subagent fallback is `grok-4.7` at `medium`, the one effort every worker model accepts. Dispatch rules: [AGENTS.md](../AGENTS.md).
 
 Codex also applies a local catalog (`model_catalog_json`) that can set a smaller working context than the vendor maximum. Check it if a packet is near the limits below.
 

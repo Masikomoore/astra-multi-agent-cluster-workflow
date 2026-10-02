@@ -57,13 +57,13 @@ See [docs/models.md](docs/models.md) for published capabilities and the evidence
 
 ## Reasoning effort
 
-Astra **chooses effort per packet**, then clamps it to what that model actually accepts. Worker TOML files do not set `model_reasoning_effort`, so Codex can apply the spawn value. If the spawn tool has an effort field, set it. Always write the chosen value into the task packet. If spawn cannot pass effort, Codex falls back to `default_subagent_reasoning_effort` (`high`); still record the intended value in the packet.
+Astra **chooses effort per packet**, then clamps it to what that model actually accepts. Worker TOML files do not set `model_reasoning_effort`, so Codex can apply the spawn value. If the spawn tool has an effort field, set it. Always write the chosen value into the task packet. If spawn cannot pass effort, Codex falls back to `default_subagent_reasoning_effort` (`medium`, accepted by every worker model); still record the intended value in the packet.
 
 Never send an unsupported value (many gateways return HTTP 400). Pick a task level, then clamp:
 
 | Agent | Model | Allowed `model_reasoning_effort` | Do not send | If unsure |
 | --- | --- | --- | --- | --- |
-| primary | `gpt-6-astra` | `low`, `medium`, `high`, `xhigh`, `max` | `none` | keep session `xhigh` |
+| primary | `gpt-6-astra` | `low`, `medium`, `high`, `xhigh`, `max` | `none` | keep the session value |
 | `sol_worker` | `gpt-6.1-sol` | `low`, `medium`, `high`, `xhigh`, `max` | `none`, `minimal` | `medium` (vendor default) |
 | `grok_worker` | `grok-4.7` | `low`, `medium`, `high`, `xhigh` | `none`, `max` | fast dev: `medium` |
 | `luna_worker` | `gpt-6-luna` | `low`, `medium`, `high`, `xhigh`, `max` | `none` | cheap daily: `low` |
@@ -79,7 +79,7 @@ Task heuristic before clamp:
 4. Sol high-stakes → `high`; `xhigh` or `max` for architecture, security, or two failed attempts.
 5. After two evidence-based failures, bump one allowed step if the model has a higher level.
 
-Unnamed subagent fallback model is `grok-4.7`. Unnamed effort stays `high` unless Astra names a specialist.
+Unnamed subagent fallback model is `grok-4.7`. Unnamed effort stays `medium` unless Astra names a specialist.
 
 ## Dispatch rules
 

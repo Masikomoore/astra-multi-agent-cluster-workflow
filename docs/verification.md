@@ -1,5 +1,13 @@
 # Verification and fallbacks
 
+## Drift check
+
+```shell
+python3 scripts/check-config.py
+```
+
+Compares project and `~/.codex` agent files, `[agents.*]` tables and effort values against the model catalog. Exits 1 on any mismatch.
+
 ## Static check
 
 Run from the repository root:
@@ -19,7 +27,7 @@ agents = {
 assert config['model'] == 'gpt-6-astra'
 assert config['model_reasoning_effort'] == 'xhigh'
 assert config['agents']['default_subagent_model'] == 'grok-4.7'
-assert config['agents']['default_subagent_reasoning_effort'] == 'high'
+assert config['agents']['default_subagent_reasoning_effort'] == 'medium'
 assert config['agents']['max_concurrent_threads_per_session'] == 8
 
 expected = {
