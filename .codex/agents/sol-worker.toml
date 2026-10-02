@@ -14,7 +14,3 @@ If the packet is decision-only, return a recommendation with decisive evidence, 
 
 Stop and return evidence when requirements are ambiguous, repository facts contradict the packet, validation cannot run, scope expands materially, or two evidence-based attempts fail. Do not claim final acceptance.
 """
-
-# sol_worker owns browser/GUI automation, which needs outbound network. Writes stay limited to the workspace.
-[sandbox_workspace_write]
-network_access = true

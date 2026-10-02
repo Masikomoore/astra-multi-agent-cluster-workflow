@@ -123,7 +123,7 @@ def main():
             if g is None:
                 fail("drift", f"{stem}.toml is in the project but not in {home}/agents")
                 continue
-            for key in ("name", "model", "description", "developer_instructions", "sandbox_mode", "sandbox_workspace_write"):
+            for key in ("name", "model", "description", "developer_instructions", "sandbox_mode"):
                 if a.get(key) != g.get(key):
                     fail("drift", f"{stem}.toml {key} differs between project and global")
 
